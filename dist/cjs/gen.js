@@ -5,6 +5,12 @@ exports.seeded = exports.empty = exports.of = exports.Gen = void 0;
  * @summary
  * Generator that holds the computation for generating values and the
  * {@link State | internal state} for incrementing the seed.
+ *
+ * @category Class
+
+ * @remarks
+ * A generator is lazy: it will only run when `Gen.run` is called with the state.
+ * To compose the generator's data without consuming it, consider using the combinators.
  */
 class Gen {
     stateful;
@@ -19,7 +25,7 @@ class Gen {
         return this.stateful(state)[0];
     }
     /**
-     * @summary Runs
+     * @summary Modifies the state of the generate without modifying the value.
      * @category Combinator
      */
     modify(f) {
@@ -35,6 +41,81 @@ class Gen {
     increment() {
         return this.modify(({ lcg, seed }) => ({ lcg, seed: lcg.increment(seed) }));
     }
+    /**
+     * @summary Apply a function to the value inside of a generator.
+     * @category Combinator
+     *
+     * @example
+     * ```ts
+     * import * as gen from "chansheng"
+     * import * as assert from "assert"
+     *
+     * const value = 8
+     * const doubler = (number: number) => number * 2
+     * const generator = gen.of(value).map(doubler)
+     * const result = generator.run({ seed: 0, lcg: gen.lcg})
+     * const expected = 16
+     *
+     * assert.deepStrictEqual(result, expected)
+     * ```
+     */
+    map(f) {
+        return new Gen((state1) => {
+            const [value1, state2] = this.stateful(state1);
+            const value2 = f(value1);
+            return [value2, state2];
+        });
+    }
+    /**
+     * @summary Apply a function inside of a generator to the supplied value.
+     * @category Combinator
+     *
+     * @example
+     * ```ts
+     * import * as gen from "chansheng"
+     * import * as assert from "assert"
+     *
+     * const value = 8
+     * const doubler = (number: number) => number * 2
+     * const generator = gen.of(doubler).flap(value)
+     * const result = generator.run({ seed: 0, lcg: gen.lcg})
+     * const expected = 16
+     *
+     * assert.deepStrictEqual(result, expected)
+     * ```
+     */
+    flap(parameter) {
+        return this.map((f) => f(parameter));
+    }
+    /**
+     * @summary
+     * Applies the function within `this` generator to the value within
+     * the generator provided.
+     *
+     * @category Combinator
+     *
+     * @example
+     * ```ts
+     * import * as gen from "chansheng"
+     * import * as assert from "assert"
+     *
+     * const value = 8
+     * const doubler = (number: number) => number * 2
+     * const generator = gen.of(doubler).apply(gen.of(value))
+     * const result = generator.run({ seed: 0, lcg: gen.lcg})
+     * const expected = 16
+     *
+     * assert.deepStrictEqual(result, expected)
+     * ```
+     */
+    apply(gen) {
+        return new Gen((state1) => {
+            const [value1, state2] = this.stateful(state1);
+            const [value2, state3] = gen.stateful(state2);
+            const value3 = value1(value2);
+            return [value3, state3];
+        });
+    }
 }
 exports.Gen = Gen;
 /**
@@ -42,13 +123,13 @@ exports.Gen = Gen;
  * @category Constructor
  *
  * @example
- * ```ts
+ * ```js
  * import * as gen from "chansheng"
  * import * as assert from "node:assert"
  *
  * const value = 2
  * const generator = gen.of(value)
- * const result = generator({ seed: 0, lcg: gen.lcg})
+ * const result = generator.run({ seed: 0, lcg: gen.lcg})
  *
  * assert.deepStrictEqual(result, value)
  * ```

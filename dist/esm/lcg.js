@@ -1,3 +1,7 @@
+/**
+ * @summary A linear congruent generator, often used to increment a seed.
+ * @category Class
+ */
 export class Lcg {
     a;
     c;
@@ -7,6 +11,10 @@ export class Lcg {
         this.c = c;
         this.m = m;
     }
+    /**
+     * @summary Increments the seed using the linea congruent generator algorithm.
+     * @category Combinator
+     */
     increment(seed) {
         return (this.a * seed + this.c) % this.m;
     }
