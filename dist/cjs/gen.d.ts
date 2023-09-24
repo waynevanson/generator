@@ -82,7 +82,7 @@ export declare class Gen<A> {
     /**
      * @summary
      * Applies the function within `this` generator to the value within
-     * the generator provided.
+     * the generator provided, whilst letting the generators transform the state.
      *
      * @category Combinator
      *
@@ -101,6 +101,50 @@ export declare class Gen<A> {
      * ```
      */
     apply<R, B>(this: Gen<Extract<A, (parameter: R) => B>>, gen: Gen<R>): Gen<B>;
+    /**
+     * @summary
+     * Applies the effects of `apply`, returning the first generator's value.
+     *
+     * @category Combinator
+     *
+     * @example
+     * ```ts
+     * import * as gen from "chansheng"
+     * import * as assert from "assert"
+     *
+     * const a = 2
+     * const b = 8
+     * const first = gen.of(a)
+     * const second = gen.of(b)
+     * const generator = first.applyFirst(second)
+     * const result = generator.run({ seed: 0, lcg: gen.lcg})
+     * const expected = a
+     *
+     * assert.deepStrictEqual(result, expected)
+     * ```
+     */
+    applyFirst<B>(gen: Gen<B>): Gen<A>;
+    /**
+     * @summary
+     * Applies the effects of `apply`, returning the second generator's value.
+     *
+     * @category Combinator
+     * ```ts
+     * import * as gen from "chansheng"
+     * import * as assert from "assert"
+     *
+     * const a = 2
+     * const b = 8
+     * const first = gen.of(a)
+     * const second = gen.of(b)
+     * const generator = first.applyFirst(second)
+     * const result = generator.run({ seed: 0, lcg: gen.lcg})
+     * const expected = b
+     *
+     * assert.deepStrictEqual(result, expected)
+     * ```
+     */
+    applySecond<B>(gen: Gen<B>): Gen<B>;
 }
 /**
  * @summary Creates a generator where the vaue is of type A.

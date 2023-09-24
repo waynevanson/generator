@@ -90,7 +90,7 @@ class Gen {
     /**
      * @summary
      * Applies the function within `this` generator to the value within
-     * the generator provided.
+     * the generator provided, whilst letting the generators transform the state.
      *
      * @category Combinator
      *
@@ -115,6 +115,54 @@ class Gen {
             const value3 = value1(value2);
             return [value3, state3];
         });
+    }
+    /**
+     * @summary
+     * Applies the effects of `apply`, returning the first generator's value.
+     *
+     * @category Combinator
+     *
+     * @example
+     * ```ts
+     * import * as gen from "chansheng"
+     * import * as assert from "assert"
+     *
+     * const a = 2
+     * const b = 8
+     * const first = gen.of(a)
+     * const second = gen.of(b)
+     * const generator = first.applyFirst(second)
+     * const result = generator.run({ seed: 0, lcg: gen.lcg})
+     * const expected = a
+     *
+     * assert.deepStrictEqual(result, expected)
+     * ```
+     */
+    applyFirst(gen) {
+        return this.map((a) => () => a).apply(gen);
+    }
+    /**
+     * @summary
+     * Applies the effects of `apply`, returning the second generator's value.
+     *
+     * @category Combinator
+     * ```ts
+     * import * as gen from "chansheng"
+     * import * as assert from "assert"
+     *
+     * const a = 2
+     * const b = 8
+     * const first = gen.of(a)
+     * const second = gen.of(b)
+     * const generator = first.applyFirst(second)
+     * const result = generator.run({ seed: 0, lcg: gen.lcg})
+     * const expected = b
+     *
+     * assert.deepStrictEqual(result, expected)
+     * ```
+     */
+    applySecond(gen) {
+        return this.map((_) => (b) => b).apply(gen);
     }
 }
 exports.Gen = Gen;
