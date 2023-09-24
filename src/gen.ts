@@ -183,6 +183,28 @@ export class Gen<A> {
   applySecond<B>(gen: Gen<B>): Gen<B> {
     return this.map((_) => (b: B) => b).apply(gen)
   }
+
+  /**
+   * @summary
+   * Applies the effects of `apply`, returning the second generator's value.
+   *
+   * @category Combinator
+   * ```ts
+   * import * as gen from "chansheng"
+   * import * as assert from "assert"
+   *
+   * const value = 2
+   * const property = "hello"
+   * const generator = gen.of(value).do(property)
+   * const result = generator.run({ seed: 0, lcg: gen.lcg})
+   * const expected = { [property]: value}
+   *
+   * assert.deepStrictEqual(result, expected)
+   * ```
+   */
+  do<K extends string>(property: K): Gen<{ [P in K]: A }> {
+    return this.map((value) => ({ [property]: value } as never))
+  }
 }
 
 /**

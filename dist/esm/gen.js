@@ -161,6 +161,27 @@ export class Gen {
     applySecond(gen) {
         return this.map((_) => (b) => b).apply(gen);
     }
+    /**
+     * @summary
+     * Applies the effects of `apply`, returning the second generator's value.
+     *
+     * @category Combinator
+     * ```ts
+     * import * as gen from "chansheng"
+     * import * as assert from "assert"
+     *
+     * const value = 2
+     * const property = "hello"
+     * const generator = gen.of(value).do(property)
+     * const result = generator.run({ seed: 0, lcg: gen.lcg})
+     * const expected = { [property]: value}
+     *
+     * assert.deepStrictEqual(result, expected)
+     * ```
+     */
+    do(property) {
+        return this.map((value) => ({ [property]: value }));
+    }
 }
 /**
  * @summary Creates a generator where the vaue is of type A.
