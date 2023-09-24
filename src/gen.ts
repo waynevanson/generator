@@ -186,7 +186,33 @@ export class Gen<A> {
 
   /**
    * @summary
-   * Applies the effects of `apply`, returning the second generator's value.
+   * Uses the the current value inside of a generator to create a new generator,
+   * returning the new generators result.
+   *
+   * @category Combinator
+   * ```ts
+   * import * as gen from "chansheng"
+   * import * as assert from "assert"
+   *
+   * const value = 2
+   * const generator = gen.of(value).chain(number => gen.of(number))
+   * const result = generator.run({ seed: 0, lcg: gen.lcg })
+   * const expected = value
+   * assert.deepStrictEqual(result, expected)
+   * ```
+   */
+  chain<B>(f: (value: A) => Gen<B>): Gen<B> {
+    return new Gen((state1) => {
+      const [value1, state2] = this.stateful(state1)
+      return f(value1).stateful(state2)
+    })
+  }
+
+  /**
+   * @summary
+   * Creates an object within the generator that has the property name provided
+   * as a property and the value within the generato as the value.
+   * Useful for composing with the `do` syntax provided.
    *
    * @category Combinator
    * ```ts
