@@ -172,9 +172,9 @@ export class Gen {
      * import * as assert from "assert"
      *
      * const value = 2
-     * const generator = gen.of(value).chain(number => gen.of(number))
+     * const generator = gen.of(value).chain(number => gen.of(number * 8))
      * const result = generator.run({ seed: 0, lcg: gen.lcg })
-     * const expected = value
+     * const expected = 16
      * assert.deepStrictEqual(result, expected)
      * ```
      */
@@ -183,6 +183,26 @@ export class Gen {
             const [value1, state2] = this.stateful(state1);
             return f(value1).stateful(state2);
         });
+    }
+    /**
+     * @summary
+     * Uses the the current value inside of a generator to create a new generator,
+     * returning the new generators result.
+     *
+     * @category Combinator
+     * ```ts
+     * import * as gen from "chansheng"
+     * import * as assert from "assert"
+     *
+     * const value = 2
+     * const generator = gen.of(value).chainFirst(number => gen.of(number * 8))
+     * const result = generator.run({ seed: 0, lcg: gen.lcg })
+     * const expected = value
+     * assert.deepStrictEqual(result, expected)
+     * ```
+     */
+    chainFirst(f) {
+        return this.chain((a) => f(a).map(() => a));
     }
     /**
      * @summary

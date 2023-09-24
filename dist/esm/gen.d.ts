@@ -156,13 +156,31 @@ export declare class Gen<A> {
      * import * as assert from "assert"
      *
      * const value = 2
-     * const generator = gen.of(value).chain(number => gen.of(number))
+     * const generator = gen.of(value).chain(number => gen.of(number * 8))
+     * const result = generator.run({ seed: 0, lcg: gen.lcg })
+     * const expected = 16
+     * assert.deepStrictEqual(result, expected)
+     * ```
+     */
+    chain<B>(f: (value: A) => Gen<B>): Gen<B>;
+    /**
+     * @summary
+     * Uses the the current value inside of a generator to create a new generator,
+     * returning the new generators result.
+     *
+     * @category Combinator
+     * ```ts
+     * import * as gen from "chansheng"
+     * import * as assert from "assert"
+     *
+     * const value = 2
+     * const generator = gen.of(value).chainFirst(number => gen.of(number * 8))
      * const result = generator.run({ seed: 0, lcg: gen.lcg })
      * const expected = value
      * assert.deepStrictEqual(result, expected)
      * ```
      */
-    chain<B>(f: (value: A) => Gen<B>): Gen<B>;
+    chainFirst<B>(f: (value: A) => Gen<B>): Gen<A>;
     /**
      * @summary
      * Creates an object within the generator that has the property name provided
