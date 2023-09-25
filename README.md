@@ -10,4 +10,7 @@ yarn add @waynevanson/generator
 pnpm add @waynevanson/generator
 ```
 
-## Usage
+## Docs
+
+Please visit the code for more information.
+The code has docs and the code examples are the tests.
