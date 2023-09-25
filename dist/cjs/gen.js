@@ -259,9 +259,6 @@ class Gen {
     doChain(property, kleisli) {
         return this.chain((a) => kleisli(a).map((b) => Object.assign({}, a, { [property]: b })));
     }
-    doMap(property, f) {
-        return this.chain((a) => Object.assign({}, a, { [property]: f(a) }));
-    }
     /**
      * @summary
      * Just like `apply` but binds the returning value of the provided generator

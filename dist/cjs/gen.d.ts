@@ -233,9 +233,6 @@ export declare class Gen<A> {
     doChain<K extends string, B>(property: Exclude<K, keyof A>, kleisli: (value: A) => Gen<B>): Gen<{
         [P in keyof A | K]: P extends keyof A ? A[P] : B;
     }>;
-    doMap<K extends string, B>(property: Exclude<K, keyof A>, f: (value: A) => B): Gen<{
-        [P in keyof A | K]: P extends keyof A ? A[P] : B;
-    }>;
     /**
      * @summary
      * Just like `apply` but binds the returning value of the provided generator

@@ -288,15 +288,6 @@ export class Gen<A> {
     )
   }
 
-  doMap<K extends string, B>(
-    property: Exclude<K, keyof A>,
-    f: (value: A) => B
-  ): Gen<{ [P in keyof A | K]: P extends keyof A ? A[P] : B }> {
-    return this.chain(
-      (a) => Object.assign({}, a, { [property]: f(a) }) as never
-    )
-  }
-
   /**
    * @summary
    * Just like `apply` but binds the returning value of the provided generator
