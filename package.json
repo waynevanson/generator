@@ -17,6 +17,9 @@
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
   "private": false,
+  "repository": {
+    "url": "https://github.com/waynevanson/generator"
+  },
   "scripts": {
     "build": "rm -rf dist && run-p build:*",
     "build:esm": "tsc -p tsconfig.esm.json",
