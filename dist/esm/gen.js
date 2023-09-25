@@ -739,7 +739,6 @@ export function range(gen, { state, size = 10 }) {
  */
 export function partial(gens) {
     return new Gen((state) => {
-        // each key needs a boolean
         const gensByProperty = Object.keys(gens);
         const result = {};
         let value;
@@ -755,4 +754,33 @@ export function partial(gens) {
         }
         return [result, state];
     });
+}
+/**
+ * @summary
+ * Merges the keys and values of two objects.
+ *
+ * @category Combinator
+ *
+ * @example
+ * ```ts
+ * import * as gen from "@waynevanson/generator"
+ * import * as assert from "node:assert"
+ *
+ * const first = gen.struct({
+ *   one: gen.number()
+ * })
+ * const second = gen.partial({
+ *   two: gen.char()
+ * })
+ * const generator = gen.intersect(first, second)
+ * const result = generator.run({ seed: 2978653157, lcg: gen.lcg})
+ * const expected = {
+ *   one: 100
+ * }
+ *
+ * assert.deepStrictEqual(result, expected)
+ * ```
+ */
+export function intersect(first, second) {
+    return tuple(first, second).map(([first, second]) => Object.assign(first, second));
 }

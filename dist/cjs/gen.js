@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.partial = exports.range = exports.record = exports.struct = exports.tuple = exports.string = exports.char = exports.number = exports.constants = exports.boolean = exports.sized = exports.stated = exports.seeded = exports.of = exports.optional = exports.undefinable = exports.nullable = exports.array = exports.vector = exports.Gen = void 0;
+exports.intersect = exports.partial = exports.range = exports.record = exports.struct = exports.tuple = exports.string = exports.char = exports.number = exports.constants = exports.boolean = exports.sized = exports.stated = exports.seeded = exports.of = exports.optional = exports.undefinable = exports.nullable = exports.array = exports.vector = exports.Gen = void 0;
 /**
  * @summary
  * Generator that holds the computation for generating values and the
@@ -758,7 +758,6 @@ exports.range = range;
  */
 function partial(gens) {
     return new Gen((state) => {
-        // each key needs a boolean
         const gensByProperty = Object.keys(gens);
         const result = {};
         let value;
@@ -776,3 +775,33 @@ function partial(gens) {
     });
 }
 exports.partial = partial;
+/**
+ * @summary
+ * Merges the keys and values of two objects.
+ *
+ * @category Combinator
+ *
+ * @example
+ * ```ts
+ * import * as gen from "@waynevanson/generator"
+ * import * as assert from "node:assert"
+ *
+ * const first = gen.struct({
+ *   one: gen.number()
+ * })
+ * const second = gen.partial({
+ *   two: gen.char()
+ * })
+ * const generator = gen.intersect(first, second)
+ * const result = generator.run({ seed: 2978653157, lcg: gen.lcg})
+ * const expected = {
+ *   one: 100
+ * }
+ *
+ * assert.deepStrictEqual(result, expected)
+ * ```
+ */
+function intersect(first, second) {
+    return tuple(first, second).map(([first, second]) => Object.assign(first, second));
+}
+exports.intersect = intersect;

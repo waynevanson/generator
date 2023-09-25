@@ -873,7 +873,6 @@ export function partial<T extends Record<string, unknown>>(gens: {
   [P in keyof T]: Gen<T[P]>
 }): Gen<Partial<T>> {
   return new Gen((state) => {
-    // each key needs a boolean
     const gensByProperty = Object.keys(gens) as Array<keyof T>
     const result = {} as Partial<T>
     let value
@@ -887,4 +886,39 @@ export function partial<T extends Record<string, unknown>>(gens: {
     }
     return [result, state]
   })
+}
+
+/**
+ * @summary
+ * Merges the keys and values of two objects.
+ *
+ * @category Combinator
+ *
+ * @example
+ * ```ts
+ * import * as gen from "@waynevanson/generator"
+ * import * as assert from "node:assert"
+ *
+ * const first = gen.struct({
+ *   one: gen.number()
+ * })
+ * const second = gen.partial({
+ *   two: gen.char()
+ * })
+ * const generator = gen.intersect(first, second)
+ * const result = generator.run({ seed: 2978653157, lcg: gen.lcg})
+ * const expected = {
+ *   one: 100
+ * }
+ *
+ * assert.deepStrictEqual(result, expected)
+ * ```
+ */
+export function intersect<
+  T extends Record<string, unknown>,
+  U extends Record<string, unknown>
+>(first: Gen<T>, second: Gen<U>): Gen<T & U> {
+  return tuple(first, second).map(([first, second]) =>
+    Object.assign(first, second)
+  )
 }
