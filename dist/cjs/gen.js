@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.range = exports.record = exports.struct = exports.tuple = exports.string = exports.char = exports.number = exports.constants = exports.boolean = exports.sized = exports.stated = exports.seeded = exports.of = exports.optional = exports.undefinable = exports.nullable = exports.array = exports.vector = exports.Gen = void 0;
+exports.partial = exports.range = exports.record = exports.struct = exports.tuple = exports.string = exports.char = exports.number = exports.constants = exports.boolean = exports.sized = exports.stated = exports.seeded = exports.of = exports.optional = exports.undefinable = exports.nullable = exports.array = exports.vector = exports.Gen = void 0;
 /**
  * @summary
  * Generator that holds the computation for generating values and the
@@ -672,7 +672,7 @@ function struct(gens) {
 }
 exports.struct = struct;
 /**
- * @summary Generates a tuple containing each generator's value.
+ * @summary Generates an object containing each generator's value with fixed keys.
  * @category Combinator
  * @example
  * ```ts
@@ -730,3 +730,49 @@ function range(gen, { state, size = 10 }) {
     return result;
 }
 exports.range = range;
+/**
+ * @summary
+ * Generates an object containing each generator's value with fixed keys
+ * that may be present.
+ *
+ * @category Combinator
+ *
+ * @example
+ * ```ts
+ * import * as gen from "@waynevanson/generator"
+ * import * as assert from "node:assert"
+ *
+ * const generator = gen.partial({
+ *   first: gen.number(),
+ *   second: gen.char(),
+ *   third: gen.string({ max: 20 }))
+ * })
+ * const result = generator.run({ seed: 2978653158, lcg: gen.lcg})
+ * const expected = {
+ *   second: 'm',
+ *   third: 'j-gL1>*mKFi0j>c5:r'
+ * }
+ *
+ * assert.deepStrictEqual(result, expected)
+ * ```
+ */
+function partial(gens) {
+    return new Gen((state) => {
+        // each key needs a boolean
+        const gensByProperty = Object.keys(gens);
+        const result = {};
+        let value;
+        let skip;
+        for (const property of gensByProperty) {
+            ;
+            [skip, state] = exports.boolean.stateful(state);
+            if (skip)
+                continue;
+            const gen = gens[property];
+            [value, state] = gen.stateful(state);
+            result[property] = value;
+        }
+        return [result, state];
+    });
+}
+exports.partial = partial;

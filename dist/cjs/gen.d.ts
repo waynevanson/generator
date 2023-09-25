@@ -579,7 +579,7 @@ export declare function struct<T extends Record<string, unknown>>(gens: {
     [P in keyof T]: Gen<T[P]>;
 }): Gen<T>;
 /**
- * @summary Generates a tuple containing each generator's value.
+ * @summary Generates an object containing each generator's value with fixed keys.
  * @category Combinator
  * @example
  * ```ts
@@ -624,3 +624,32 @@ export declare function range<A>(gen: Gen<A>, { state, size }: {
     state: State;
     size?: number;
 }): Array<A>;
+/**
+ * @summary
+ * Generates an object containing each generator's value with fixed keys
+ * that may be present.
+ *
+ * @category Combinator
+ *
+ * @example
+ * ```ts
+ * import * as gen from "@waynevanson/generator"
+ * import * as assert from "node:assert"
+ *
+ * const generator = gen.partial({
+ *   first: gen.number(),
+ *   second: gen.char(),
+ *   third: gen.string({ max: 20 }))
+ * })
+ * const result = generator.run({ seed: 2978653158, lcg: gen.lcg})
+ * const expected = {
+ *   second: 'm',
+ *   third: 'j-gL1>*mKFi0j>c5:r'
+ * }
+ *
+ * assert.deepStrictEqual(result, expected)
+ * ```
+ */
+export declare function partial<T extends Record<string, unknown>>(gens: {
+    [P in keyof T]: Gen<T[P]>;
+}): Gen<Partial<T>>;
