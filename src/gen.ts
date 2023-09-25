@@ -396,7 +396,7 @@ export function vector<A>(
  */
 export function array<A>(
   gen: Gen<A>,
-  { min = 0, max }: NumberOptions
+  { min = 0, max }: NumberOptions = {}
 ): Gen<Array<A>> {
   return number({ min, max }).chain((size) => vector(gen, { size }))
 }
@@ -774,4 +774,38 @@ export function struct<T extends Record<string, unknown>>(gens: {
 
     return [result as never, state1]
   })
+}
+
+/**
+ * @summary Generates a tuple containing each generator's value.
+ * @category Combinator
+ * @example
+ * ```ts
+ * import * as gen from "@waynevanson/generator"
+ * import * as assert from "node:assert"
+ *
+ * const generator = gen.record(gen.char() ,gen.string({ max: 20}), { min:4, max: 8})
+ * const result = generator.run({ seed: 1357954837, lcg: gen.lcg})
+ * const expected = {
+ *   '6': 'AQ',
+ *   '?': 'Q/0',
+ *   j: '%`/Z\\)!/p',
+ *   r: 'L|=`D9sA',
+ *   w: '1lm88RW:\\)RNhk(uDI'
+ * }
+ *
+ * assert.deepStrictEqual(result, expected)
+ * ```
+ */
+export function record<K extends string, A>(
+  property: Gen<K>,
+  value: Gen<A>,
+  range: NumberOptions
+): Gen<Record<K, A>> {
+  return array(tuple(property, value), range).map((entries) =>
+    entries.reduce((result, [property, value]) => {
+      result[property] = value
+      return result
+    }, {} as Record<K, A>)
+  )
 }

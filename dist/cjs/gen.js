@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.struct = exports.tuple = exports.string = exports.char = exports.number = exports.constants = exports.boolean = exports.sized = exports.stated = exports.seeded = exports.of = exports.optional = exports.undefinable = exports.nullable = exports.array = exports.vector = exports.Gen = void 0;
+exports.record = exports.struct = exports.tuple = exports.string = exports.char = exports.number = exports.constants = exports.boolean = exports.sized = exports.stated = exports.seeded = exports.of = exports.optional = exports.undefinable = exports.nullable = exports.array = exports.vector = exports.Gen = void 0;
 /**
  * @summary
  * Generator that holds the computation for generating values and the
@@ -339,7 +339,7 @@ exports.vector = vector;
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-function array(gen, { min = 0, max }) {
+function array(gen, { min = 0, max } = {}) {
     return number({ min, max }).chain((size) => vector(gen, { size }));
 }
 exports.array = array;
@@ -671,3 +671,31 @@ function struct(gens) {
     });
 }
 exports.struct = struct;
+/**
+ * @summary Generates a tuple containing each generator's value.
+ * @category Combinator
+ * @example
+ * ```ts
+ * import * as gen from "@waynevanson/generator"
+ * import * as assert from "node:assert"
+ *
+ * const generator = gen.record(gen.char() ,gen.string({ max: 20}), { min:4, max: 8})
+ * const result = generator.run({ seed: 1357954837, lcg: gen.lcg})
+ * const expected = {
+ *   '6': 'AQ',
+ *   '?': 'Q/0',
+ *   j: '%`/Z\\)!/p',
+ *   r: 'L|=`D9sA',
+ *   w: '1lm88RW:\\)RNhk(uDI'
+ * }
+ *
+ * assert.deepStrictEqual(result, expected)
+ * ```
+ */
+function record(property, value, range) {
+    return array(tuple(property, value), range).map((entries) => entries.reduce((result, [property, value]) => {
+        result[property] = value;
+        return result;
+    }, {}));
+}
+exports.record = record;
