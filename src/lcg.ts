@@ -6,7 +6,7 @@ export class Lcg {
   constructor(public a: number, public c: number, public m: number) {}
 
   /**
-   * @summary Increments the seed using the linea congruent generator algorithm.
+   * @summary Increments the seed using the linear congruent generator algorithm.
    * @category Combinator
    */
   increment(seed: number): number {

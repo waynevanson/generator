@@ -8,7 +8,7 @@ export declare class Lcg {
     m: number;
     constructor(a: number, c: number, m: number);
     /**
-     * @summary Increments the seed using the linea congruent generator algorithm.
+     * @summary Increments the seed using the linear congruent generator algorithm.
      * @category Combinator
      */
     increment(seed: number): number;

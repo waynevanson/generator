@@ -12,7 +12,7 @@ export class Lcg {
         this.m = m;
     }
     /**
-     * @summary Increments the seed using the linea congruent generator algorithm.
+     * @summary Increments the seed using the linear congruent generator algorithm.
      * @category Combinator
      */
     increment(seed) {
