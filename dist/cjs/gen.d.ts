@@ -680,3 +680,30 @@ export declare function partial<T extends Record<string, unknown>>(gens: {
  * ```
  */
 export declare function intersect<T extends Record<string, unknown>, U extends Record<string, unknown>>(first: Gen<T>, second: Gen<U>): Gen<T & U>;
+/**
+ * @summary
+ * Merges the keys and values of two objects.
+ *
+ * @category Combinator
+ *
+ * @example
+ * ```ts
+ * import * as gen from "@waynevanson/generator"
+ * import * as assert from "node:assert"
+ *
+ * const first = gen.struct({
+ *   one: gen.number()
+ * })
+ * const second = gen.struct({
+ *   two: gen.char()
+ * })
+ * const generator = gen.union(first, second)
+ * const result = generator.run({ seed: 2978653157, lcg: gen.lcg})
+ * const expected = {
+ *  two: 'O'
+ * }
+ *
+ * assert.deepStrictEqual(result, expected)
+ * ```
+ */
+export declare function union<T, U>(first: Gen<T>, second: Gen<U>): Gen<T | U>;

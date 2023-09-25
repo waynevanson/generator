@@ -922,3 +922,33 @@ export function intersect<
     Object.assign(first, second)
   )
 }
+
+/**
+ * @summary
+ * Merges the keys and values of two objects.
+ *
+ * @category Combinator
+ *
+ * @example
+ * ```ts
+ * import * as gen from "@waynevanson/generator"
+ * import * as assert from "node:assert"
+ *
+ * const first = gen.struct({
+ *   one: gen.number()
+ * })
+ * const second = gen.struct({
+ *   two: gen.char()
+ * })
+ * const generator = gen.union(first, second)
+ * const result = generator.run({ seed: 2978653157, lcg: gen.lcg})
+ * const expected = {
+ *  two: 'O'
+ * }
+ *
+ * assert.deepStrictEqual(result, expected)
+ * ```
+ */
+export function union<T, U>(first: Gen<T>, second: Gen<U>): Gen<T | U> {
+  return boolean.chain((boolean): Gen<T | U> => (boolean ? first : second))
+}
