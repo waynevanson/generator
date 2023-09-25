@@ -600,3 +600,27 @@ export declare function struct<T extends Record<string, unknown>>(gens: {
  * ```
  */
 export declare function record<K extends string, A>(property: Gen<K>, value: Gen<A>, range: NumberOptions): Gen<Record<K, A>>;
+/**
+ * @summary Generates a list of values from a generator.
+ * @category Destructor
+ * @example
+ * ```ts
+ * import * as gen from "@waynevanson/generator"
+ * import * as assert from "node:assert"
+ *
+ * const state = { seed: 1357954837, lcg: gen.lcg}
+ * const result = gen.range(gen.char(), { state, size: 4})
+ * const expected = [
+ *   '>',
+ *   'w',
+ *   'v',
+ *   '1'
+ * ]
+ *
+ * assert.deepStrictEqual(result, expected)
+ * ```
+ */
+export declare function range<A>(gen: Gen<A>, { state, size }: {
+    state: State;
+    size?: number;
+}): Array<A>;

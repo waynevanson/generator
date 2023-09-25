@@ -681,3 +681,33 @@ export function record(property, value, range) {
         return result;
     }, {}));
 }
+/**
+ * @summary Generates a list of values from a generator.
+ * @category Destructor
+ * @example
+ * ```ts
+ * import * as gen from "@waynevanson/generator"
+ * import * as assert from "node:assert"
+ *
+ * const state = { seed: 1357954837, lcg: gen.lcg}
+ * const result = gen.range(gen.char(), { state, size: 4})
+ * const expected = [
+ *   '>',
+ *   'w',
+ *   'v',
+ *   '1'
+ * ]
+ *
+ * assert.deepStrictEqual(result, expected)
+ * ```
+ */
+export function range(gen, { state, size = 10 }) {
+    const result = [];
+    let value;
+    for (const _ of new Array(size)) {
+        ;
+        [value, state] = gen.stateful(state);
+        result.push(value);
+    }
+    return result;
+}

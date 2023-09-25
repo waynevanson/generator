@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.record = exports.struct = exports.tuple = exports.string = exports.char = exports.number = exports.constants = exports.boolean = exports.sized = exports.stated = exports.seeded = exports.of = exports.optional = exports.undefinable = exports.nullable = exports.array = exports.vector = exports.Gen = void 0;
+exports.range = exports.record = exports.struct = exports.tuple = exports.string = exports.char = exports.number = exports.constants = exports.boolean = exports.sized = exports.stated = exports.seeded = exports.of = exports.optional = exports.undefinable = exports.nullable = exports.array = exports.vector = exports.Gen = void 0;
 /**
  * @summary
  * Generator that holds the computation for generating values and the
@@ -699,3 +699,34 @@ function record(property, value, range) {
     }, {}));
 }
 exports.record = record;
+/**
+ * @summary Generates a list of values from a generator.
+ * @category Destructor
+ * @example
+ * ```ts
+ * import * as gen from "@waynevanson/generator"
+ * import * as assert from "node:assert"
+ *
+ * const state = { seed: 1357954837, lcg: gen.lcg}
+ * const result = gen.range(gen.char(), { state, size: 4})
+ * const expected = [
+ *   '>',
+ *   'w',
+ *   'v',
+ *   '1'
+ * ]
+ *
+ * assert.deepStrictEqual(result, expected)
+ * ```
+ */
+function range(gen, { state, size = 10 }) {
+    const result = [];
+    let value;
+    for (const _ of new Array(size)) {
+        ;
+        [value, state] = gen.stateful(state);
+        result.push(value);
+    }
+    return result;
+}
+exports.range = range;
