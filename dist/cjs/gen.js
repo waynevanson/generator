@@ -47,7 +47,7 @@ class Gen {
      *
      * @example
      * ```ts
-     * import * as gen from "chansheng"
+     * import * as gen from "@waynevanson/generator"
      * import * as assert from "assert"
      *
      * const value = 8
@@ -72,7 +72,7 @@ class Gen {
      *
      * @example
      * ```ts
-     * import * as gen from "chansheng"
+     * import * as gen from "@waynevanson/generator"
      * import * as assert from "assert"
      *
      * const value = 8
@@ -96,7 +96,7 @@ class Gen {
      *
      * @example
      * ```ts
-     * import * as gen from "chansheng"
+     * import * as gen from "@waynevanson/generator"
      * import * as assert from "assert"
      *
      * const value = 8
@@ -124,7 +124,7 @@ class Gen {
      *
      * @example
      * ```ts
-     * import * as gen from "chansheng"
+     * import * as gen from "@waynevanson/generator"
      * import * as assert from "assert"
      *
      * const a = 2
@@ -148,7 +148,7 @@ class Gen {
      * @category Combinator
      * @example
      * ```ts
-     * import * as gen from "chansheng"
+     * import * as gen from "@waynevanson/generator"
      * import * as assert from "assert"
      *
      * const a = 2
@@ -174,7 +174,7 @@ class Gen {
      
      * @example
      * ```ts
-     * import * as gen from "chansheng"
+     * import * as gen from "@waynevanson/generator"
      * import * as assert from "assert"
      *
      * const value = 2
@@ -199,7 +199,7 @@ class Gen {
      *
      * @example
      * ```ts
-     * import * as gen from "chansheng"
+     * import * as gen from "@waynevanson/generator"
      * import * as assert from "assert"
      *
      * const value = 2
@@ -222,7 +222,7 @@ class Gen {
      *
      * @example
      * ```ts
-     * import * as gen from "chansheng"
+     * import * as gen from "@waynevanson/generator"
      * import * as assert from "assert"
      *
      * const value = 2
@@ -246,7 +246,7 @@ class Gen {
      *
      * @example
      * ```ts
-     * import * as gen from "chansheng"
+     * import * as gen from "@waynevanson/generator"
      * import * as assert from "assert"
      *
      * const generator = gen.of(2).do("first").doChain("second", ({ first }) => gen.of(8 * first))
@@ -268,7 +268,7 @@ class Gen {
      *
      * @example
      * ```ts
-     * import * as gen from "chansheng"
+     * import * as gen from "@waynevanson/generator"
      * import * as assert from "assert"
      *
      * const generator = gen.of(2).do("first").doApply("second", gen.of(8))
@@ -300,7 +300,7 @@ exports.Gen = Gen;
  *
  * @example
  * ```ts
- * import * as gen from "chansheng"
+ * import * as gen from "@waynevanson/generator"
  * import * as assert from "assert"
  *
  * const generator = gen.vector(gen.sized(10), { size: 4 })
@@ -329,7 +329,7 @@ exports.vector = vector;
  *
  * @example
  * ```ts
- * import * as gen from "chansheng"
+ * import * as gen from "@waynevanson/generator"
  * import * as assert from "assert"
  *
  * const generator = gen.vector(gen.sized(10), { size: 4 })
@@ -349,7 +349,7 @@ exports.array = array;
  *
  * @example
  * ```ts
- * import * as gen from "chansheng"
+ * import * as gen from "@waynevanson/generator"
  * import * as assert from "assert"
  *
  * const generator = gen.nullable(gen.of(1))
@@ -370,7 +370,7 @@ exports.nullable = nullable;
  *
  * @example
  * ```ts
- * import * as gen from "chansheng"
+ * import * as gen from "@waynevanson/generator"
  * import * as assert from "assert"
  *
  * const generator = gen.undefinable(gen.of(2))
@@ -391,7 +391,7 @@ exports.undefinable = undefinable;
  *
  * @example
  * ```ts
- * import * as gen from "chansheng"
+ * import * as gen from "@waynevanson/generator"
  * import * as assert from "assert"
  *
  * const generator = gen.optional(gen.of(3))
@@ -412,7 +412,7 @@ exports.optional = optional;
  *
  * @example
  * ```js
- * import * as gen from "chansheng"
+ * import * as gen from "@waynevanson/generator"
  * import * as assert from "node:assert"
  *
  * const value = 2
@@ -432,7 +432,7 @@ exports.of = of;
  *
  * @example
  * ```js
- * import * as gen from "chansheng"
+ * import * as gen from "@waynevanson/generator"
  * import * as assert from "node:assert"
  *
  * const seed = 0
@@ -449,7 +449,7 @@ exports.seeded = new Gen((state) => [state.seed, state]).increment();
  *
  * @example
  * ```ts
- * import * as gen from "chansheng"
+ * import * as gen from "@waynevanson/generator"
  * import * as assert from "node:assert"
  *
  * const state = { seed: 0, lcg: gen.lcg }
@@ -469,7 +469,7 @@ exports.stated = new Gen((state) => [state, state]).increment();
  *
  * @example
  * ```ts
- * import * as gen from "chansheng"
+ * import * as gen from "@waynevanson/generator"
  * import * as assert from "node:assert"
  *
  * const generator = gen.sized(10)
@@ -492,7 +492,7 @@ exports.sized = sized;
  *
  * @example
  * ```ts
- * import * as gen from "chansheng"
+ * import * as gen from "@waynevanson/generator"
  * import * as assert from "node:assert"
  *
  * const generator = gen.boolean
@@ -511,7 +511,7 @@ exports.boolean = sized(2).map((number) => !number);
  *
  * @example
  * ```ts
- * import * as gen from "chansheng"
+ * import * as gen from "@waynevanson/generator"
  * import * as assert from "node:assert"
  *
  * const generator = gen.constants("hello", "world")
@@ -538,7 +538,7 @@ function scale(value, source, target) {
  * @category Constructor
  * @example
  * ```ts
- * import * as gen from "chansheng"
+ * import * as gen from "@waynevanson/generator"
  * import * as assert from "node:assert"
  *
  * const generator = gen.number({ min: -57, max: 1400})
@@ -570,7 +570,7 @@ exports.number = number;
  * @category Constructor
  * @example
  * ```ts
- * import * as gen from "chansheng"
+ * import * as gen from "@waynevanson/generator"
  * import * as assert from "node:assert"
  *
  * const generator = gen.char({ from: 'a', to: 'z' })
@@ -589,7 +589,7 @@ exports.char = char;
  * @category Constructor
  * @example
  * ```ts
- * import * as gen from "chansheng"
+ * import * as gen from "@waynevanson/generator"
  * import * as assert from "node:assert"
  *
  * const generator = gen.string({ from: 'a', to: 'z', min: 1, max: 10 })
@@ -608,7 +608,7 @@ exports.string = string;
  * @category Combinator
  * @example
  * ```ts
- * import * as gen from "chansheng"
+ * import * as gen from "@waynevanson/generator"
  * import * as assert from "node:assert"
  *
  * const generator = gen.tuple(gen.number(), gen.char(), gen.string({ max: 20 }))
@@ -640,7 +640,7 @@ exports.tuple = tuple;
  * @category Combinator
  * @example
  * ```ts
- * import * as gen from "chansheng"
+ * import * as gen from "@waynevanson/generator"
  * import * as assert from "node:assert"
  *
  * const generator = gen.struct({

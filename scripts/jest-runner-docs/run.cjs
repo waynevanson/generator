@@ -34,7 +34,7 @@ module.exports = function main({ config, testPath }) {
     .flatMap((node) => node.content.toString())
     .map((esm) =>
       transpile(esm, transpilerOptions).replace(
-        /(?!require\(")(chansheng)(?="\))/,
+        /(?!require\(")(\@waynevanson\/generator)(?="\))/,
         "../../"
       )
     )
