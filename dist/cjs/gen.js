@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.union = exports.intersect = exports.partial = exports.range = exports.record = exports.struct = exports.tuple = exports.string = exports.char = exports.number = exports.constants = exports.boolean = exports.sized = exports.stated = exports.seeded = exports.of = exports.optional = exports.undefinable = exports.nullable = exports.array = exports.vector = exports.Gen = void 0;
+exports.union = exports.intersect = exports.partial = exports.range = exports.record = exports.struct = exports.tuple = exports.lazy = exports.string = exports.char = exports.number = exports.constants = exports.boolean = exports.sized = exports.stated = exports.seeded = exports.of = exports.optional = exports.undefinable = exports.nullable = exports.array = exports.vector = exports.Gen = void 0;
 /**
  * @summary
  * Generator that holds the computation for generating values and the
@@ -603,6 +603,29 @@ function string({ from, to, min = 0, max, } = {}) {
     return array(char({ from, to }), { min, max }).map((chars) => chars.join(""));
 }
 exports.string = string;
+/**
+ * @summary
+ * Returns the generator but allows it to be referenced before it is initialised,
+ * useful with generating data types that are recursive.
+ *
+ * @category Constructor
+ * @example
+ * ```ts
+ * import * as gen from "@waynevanson/generator"
+ * import * as assert from "node:assert"
+ *
+ * const generator = gen.lazy(() => string)
+ * const string = gen.string({ from: 'a', to: 'z', min: 1, max: 10 })
+ * const result = generator.run({ seed: 1357954837, lcg: gen.lcg})
+ * const expected = 'xxeu'
+ *
+ * assert.deepStrictEqual(result, expected)
+ * ```
+ */
+function lazy(thunk) {
+    return new Gen((state) => thunk().stateful(state));
+}
+exports.lazy = lazy;
 /**
  * @summary Generates a tuple containing each generator's value.
  * @category Combinator
