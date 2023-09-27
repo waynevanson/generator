@@ -339,7 +339,7 @@ exports.vector = vector;
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-function array(gen, { min = 0, max } = {}) {
+function array(gen, { min = 0, max = 50 } = {}) {
     return number({ min, max }).chain((size) => vector(gen, { size }));
 }
 exports.array = array;
@@ -599,7 +599,7 @@ exports.char = char;
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-function string({ from, to, min = 0, max, } = {}) {
+function string({ from = " ", to = "~", min = 0, max = 100, } = {}) {
     return array(char({ from, to }), { min, max }).map((chars) => chars.join(""));
 }
 exports.string = string;

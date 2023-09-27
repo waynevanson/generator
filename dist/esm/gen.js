@@ -334,7 +334,7 @@ export function vector(gen, { size }) {
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-export function array(gen, { min = 0, max } = {}) {
+export function array(gen, { min = 0, max = 50 } = {}) {
     return number({ min, max }).chain((size) => vector(gen, { size }));
 }
 /**
@@ -585,7 +585,7 @@ export function char({ from = " ", to = "~" } = {}) {
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-export function string({ from, to, min = 0, max, } = {}) {
+export function string({ from = " ", to = "~", min = 0, max = 100, } = {}) {
     return array(char({ from, to }), { min, max }).map((chars) => chars.join(""));
 }
 /**

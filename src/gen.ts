@@ -396,7 +396,7 @@ export function vector<A>(
  */
 export function array<A>(
   gen: Gen<A>,
-  { min = 0, max }: NumberOptions = {}
+  { min = 0, max = 50 }: NumberOptions = {}
 ): Gen<Array<A>> {
   return number({ min, max }).chain((size) => vector(gen, { size }))
 }
@@ -693,10 +693,10 @@ export interface StringOptions extends CharOptions, NumberOptions {}
  * ```
  */
 export function string({
-  from,
-  to,
+  from = " ",
+  to = "~",
   min = 0,
-  max,
+  max = 100,
 }: StringOptions = {}): Gen<string> {
   return array(char({ from, to }), { min, max }).map((chars) => chars.join(""))
 }
