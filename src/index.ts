@@ -1,2 +1,2 @@
-export * from "./gen.js"
-export * from "./lcg.js"
+export * from "./gen"
+export * from "./lcg"

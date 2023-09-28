@@ -7,5 +7,5 @@
     "declaration": true,
     "allowJs": true
   },
-  "include": ["src"]
+  "exclude": ["dist", "stripts"]
 }
