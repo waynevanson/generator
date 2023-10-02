@@ -166,7 +166,7 @@ export declare const boolean: Gen<boolean>;
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-export declare function constants<T extends [unknown, ...Array<unknown>]>(values: T): Gen<T[number]>;
+export declare function constants<T extends readonly [unknown, ...Array<unknown>]>(values: T): Gen<T[number]>;
 export interface CharOptions {
     from?: string;
     to?: string;
@@ -233,7 +233,7 @@ export declare function lazy<A>(thunk: () => Gen<A>): Gen<A>;
  * import * as gen from "@waynevanson/generator"
  * import * as assert from "node:assert"
  *
- * const generator = gen.tuple(gen.number(), gen.char(), gen.string({ max: 20 }))
+ * const generator = gen.tuple([gen.number(), gen.char(), gen.string({ max: 20 })] as const)
  * const result = generator.run({ seed: 1357954837, lcg: gen.lcg})
  * const expected = [
  *   -1579057621,
@@ -244,7 +244,7 @@ export declare function lazy<A>(thunk: () => Gen<A>): Gen<A>;
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-export declare function tuple<T extends [unknown, ...Array<unknown>]>(...gens: {
+export declare function tuple<T extends readonly [unknown, ...Array<unknown>]>(gens: {
     [P in keyof T]: Gen<T[P]>;
 }): Gen<T>;
 /**

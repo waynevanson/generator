@@ -207,7 +207,7 @@ export const boolean = sized(2).map((number) => !number)
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-export function constants<T extends [unknown, ...Array<unknown>]>(
+export function constants<T extends readonly [unknown, ...Array<unknown>]>(
   values: T
 ): Gen<T[number]> {
   return sized(values.length).map((index) => values[index])
@@ -302,7 +302,7 @@ export function lazy<A>(thunk: () => Gen<A>): Gen<A> {
  * import * as gen from "@waynevanson/generator"
  * import * as assert from "node:assert"
  *
- * const generator = gen.tuple(gen.number(), gen.char(), gen.string({ max: 20 }))
+ * const generator = gen.tuple([gen.number(), gen.char(), gen.string({ max: 20 })] as const)
  * const result = generator.run({ seed: 1357954837, lcg: gen.lcg})
  * const expected = [
  *   -1579057621,
@@ -313,9 +313,9 @@ export function lazy<A>(thunk: () => Gen<A>): Gen<A> {
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-export function tuple<T extends [unknown, ...Array<unknown>]>(
-  ...gens: { [P in keyof T]: Gen<T[P]> }
-): Gen<T> {
+export function tuple<T extends readonly [unknown, ...Array<unknown>]>(gens: {
+  [P in keyof T]: Gen<T[P]>
+}): Gen<T> {
   return new Gen((state1) => {
     const result = []
     let value1
@@ -395,7 +395,7 @@ export function record<K extends string, A>(
   value: Gen<A>,
   range: NumberOptions
 ): Gen<Record<K, A>> {
-  return array(tuple(property, value), range).map((entries) =>
+  return array(tuple([property, value]), range).map((entries) =>
     entries.reduce((result, [property, value]) => {
       result[property] = value
       return result
@@ -479,7 +479,7 @@ export function intersect<
   T extends Record<string, unknown>,
   U extends Record<string, unknown>
 >(first: Gen<T>, second: Gen<U>): Gen<T & U> {
-  return tuple(first, second).map(([first, second]) =>
+  return tuple([first, second]).map(([first, second]) =>
     Object.assign(first, second)
   )
 }

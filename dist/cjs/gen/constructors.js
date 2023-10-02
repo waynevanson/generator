@@ -270,7 +270,7 @@ exports.lazy = lazy;
  * import * as gen from "@waynevanson/generator"
  * import * as assert from "node:assert"
  *
- * const generator = gen.tuple(gen.number(), gen.char(), gen.string({ max: 20 }))
+ * const generator = gen.tuple([gen.number(), gen.char(), gen.string({ max: 20 })] as const)
  * const result = generator.run({ seed: 1357954837, lcg: gen.lcg})
  * const expected = [
  *   -1579057621,
@@ -281,7 +281,7 @@ exports.lazy = lazy;
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-function tuple(...gens) {
+function tuple(gens) {
     return new class_1.Gen((state1) => {
         const result = [];
         let value1;
@@ -352,7 +352,7 @@ exports.required = required;
  * ```
  */
 function record(property, value, range) {
-    return array(tuple(property, value), range).map((entries) => entries.reduce((result, [property, value]) => {
+    return array(tuple([property, value]), range).map((entries) => entries.reduce((result, [property, value]) => {
         result[property] = value;
         return result;
     }, {}));
@@ -431,7 +431,7 @@ exports.partial = partial;
  * ```
  */
 function intersect(first, second) {
-    return tuple(first, second).map(([first, second]) => Object.assign(first, second));
+    return tuple([first, second]).map(([first, second]) => Object.assign(first, second));
 }
 exports.intersect = intersect;
 /**
