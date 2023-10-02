@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.union = exports.intersect = exports.partial = exports.record = exports.struct = exports.tuple = exports.lazy = exports.string = exports.char = exports.constants = exports.boolean = exports.sized = exports.of = exports.optional = exports.undefinable = exports.nullable = exports.array = exports.vector = void 0;
+exports.sequence = exports.union = exports.intersect = exports.partial = exports.record = exports.required = exports.tuple = exports.lazy = exports.string = exports.char = exports.constants = exports.boolean = exports.sized = exports.of = exports.optional = exports.undefinable = exports.nullable = exports.array = exports.vector = void 0;
 const class_1 = require("./class");
 const instances_1 = require("./instances");
 const number_1 = require("./number");
@@ -302,7 +302,7 @@ exports.tuple = tuple;
  * import * as gen from "@waynevanson/generator"
  * import * as assert from "node:assert"
  *
- * const generator = gen.struct({
+ * const generator = gen.required({
  *   first: gen.number(),
  *   second: gen.char(),
  *   third: gen.string({ max: 20 }))
@@ -317,7 +317,7 @@ exports.tuple = tuple;
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-function struct(gens) {
+function required(gens) {
     return new class_1.Gen((state1) => {
         const result = {};
         let value1;
@@ -329,7 +329,7 @@ function struct(gens) {
         return [result, state1];
     });
 }
-exports.struct = struct;
+exports.required = required;
 /**
  * @summary Generates an object containing each generator's value with fixed keys.
  * @category Combinator
@@ -414,10 +414,10 @@ exports.partial = partial;
  * import * as gen from "@waynevanson/generator"
  * import * as assert from "node:assert"
  *
- * const first = gen.struct({
+ * const first = gen.required({
  *   one: gen.number()
  * })
- * const second = gen.struct({
+ * const second = gen.required({
  *   two: gen.char()
  * })
  * const generator = gen.intersect(first, second)
@@ -445,10 +445,10 @@ exports.intersect = intersect;
  * import * as gen from "@waynevanson/generator"
  * import * as assert from "node:assert"
  *
- * const first = gen.struct({
+ * const first = gen.required({
  *   one: gen.number()
  * })
- * const second = gen.struct({
+ * const second = gen.required({
  *   two: gen.char()
  * })
  * const generator = gen.union(first, second)
@@ -464,3 +464,35 @@ function union(first, second) {
     return exports.boolean.chain((boolean) => (boolean ? first : second));
 }
 exports.union = union;
+/**
+ * @summary
+ * Transforms an array of generators into a generator that contains an array.
+ *
+ * @category Combinator
+ *
+ * @example
+ * ```ts
+ * import * as gen from "@waynevanson/generator"
+ * import * as assert from "node:assert"
+ *
+ * const gens = [gen.char(), gen.number()]
+ * const generator = gen.sequence(gens)
+ * const result = generator.run({ seed: 2978653157, lcg: gen.lcg})
+ * const expected = ['a', -28899327]
+ *
+ * assert.deepStrictEqual(result, expected)
+ * ```
+ */
+function sequence(gens) {
+    return new class_1.Gen((state) => {
+        const results = [];
+        let value;
+        for (const gen of gens) {
+            ;
+            [value, state] = gen.stateful(state);
+            results.push(value);
+        }
+        return [results, state];
+    });
+}
+exports.sequence = sequence;

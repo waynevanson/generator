@@ -257,7 +257,7 @@ export declare function tuple<T extends [unknown, ...Array<unknown>]>(...gens: {
  * import * as gen from "@waynevanson/generator"
  * import * as assert from "node:assert"
  *
- * const generator = gen.struct({
+ * const generator = gen.required({
  *   first: gen.number(),
  *   second: gen.char(),
  *   third: gen.string({ max: 20 }))
@@ -272,7 +272,7 @@ export declare function tuple<T extends [unknown, ...Array<unknown>]>(...gens: {
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-export declare function struct<T extends Record<string, unknown>>(gens: {
+export declare function required<T extends Record<string, unknown>>(gens: {
     [P in keyof T]: Gen<T[P]>;
 }): Gen<T>;
 /**
@@ -337,10 +337,10 @@ export declare function partial<T extends Record<string, unknown>>(gens: {
  * import * as gen from "@waynevanson/generator"
  * import * as assert from "node:assert"
  *
- * const first = gen.struct({
+ * const first = gen.required({
  *   one: gen.number()
  * })
- * const second = gen.struct({
+ * const second = gen.required({
  *   two: gen.char()
  * })
  * const generator = gen.intersect(first, second)
@@ -365,10 +365,10 @@ export declare function intersect<T extends Record<string, unknown>, U extends R
  * import * as gen from "@waynevanson/generator"
  * import * as assert from "node:assert"
  *
- * const first = gen.struct({
+ * const first = gen.required({
  *   one: gen.number()
  * })
- * const second = gen.struct({
+ * const second = gen.required({
  *   two: gen.char()
  * })
  * const generator = gen.union(first, second)
@@ -381,3 +381,23 @@ export declare function intersect<T extends Record<string, unknown>, U extends R
  * ```
  */
 export declare function union<T, U>(first: Gen<T>, second: Gen<U>): Gen<T | U>;
+/**
+ * @summary
+ * Transforms an array of generators into a generator that contains an array.
+ *
+ * @category Combinator
+ *
+ * @example
+ * ```ts
+ * import * as gen from "@waynevanson/generator"
+ * import * as assert from "node:assert"
+ *
+ * const gens = [gen.char(), gen.number()]
+ * const generator = gen.sequence(gens)
+ * const result = generator.run({ seed: 2978653157, lcg: gen.lcg})
+ * const expected = ['a', -28899327]
+ *
+ * assert.deepStrictEqual(result, expected)
+ * ```
+ */
+export declare function sequence<T>(gens: Array<Gen<T>>): Gen<Array<T>>;

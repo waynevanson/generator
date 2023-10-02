@@ -287,7 +287,7 @@ export function tuple(...gens) {
  * import * as gen from "@waynevanson/generator"
  * import * as assert from "node:assert"
  *
- * const generator = gen.struct({
+ * const generator = gen.required({
  *   first: gen.number(),
  *   second: gen.char(),
  *   third: gen.string({ max: 20 }))
@@ -302,7 +302,7 @@ export function tuple(...gens) {
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-export function struct(gens) {
+export function required(gens) {
     return new Gen((state1) => {
         const result = {};
         let value1;
@@ -396,10 +396,10 @@ export function partial(gens) {
  * import * as gen from "@waynevanson/generator"
  * import * as assert from "node:assert"
  *
- * const first = gen.struct({
+ * const first = gen.required({
  *   one: gen.number()
  * })
- * const second = gen.struct({
+ * const second = gen.required({
  *   two: gen.char()
  * })
  * const generator = gen.intersect(first, second)
@@ -426,10 +426,10 @@ export function intersect(first, second) {
  * import * as gen from "@waynevanson/generator"
  * import * as assert from "node:assert"
  *
- * const first = gen.struct({
+ * const first = gen.required({
  *   one: gen.number()
  * })
- * const second = gen.struct({
+ * const second = gen.required({
  *   two: gen.char()
  * })
  * const generator = gen.union(first, second)
@@ -443,4 +443,35 @@ export function intersect(first, second) {
  */
 export function union(first, second) {
     return boolean.chain((boolean) => (boolean ? first : second));
+}
+/**
+ * @summary
+ * Transforms an array of generators into a generator that contains an array.
+ *
+ * @category Combinator
+ *
+ * @example
+ * ```ts
+ * import * as gen from "@waynevanson/generator"
+ * import * as assert from "node:assert"
+ *
+ * const gens = [gen.char(), gen.number()]
+ * const generator = gen.sequence(gens)
+ * const result = generator.run({ seed: 2978653157, lcg: gen.lcg})
+ * const expected = ['a', -28899327]
+ *
+ * assert.deepStrictEqual(result, expected)
+ * ```
+ */
+export function sequence(gens) {
+    return new Gen((state) => {
+        const results = [];
+        let value;
+        for (const gen of gens) {
+            ;
+            [value, state] = gen.stateful(state);
+            results.push(value);
+        }
+        return [results, state];
+    });
 }
