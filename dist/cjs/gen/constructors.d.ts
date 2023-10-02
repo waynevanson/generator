@@ -9,16 +9,14 @@ import { NumberOptions } from "./number";
  * import * as gen from "@waynevanson/generator"
  * import * as assert from "assert"
  *
- * const generator = gen.vector(gen.sized(10), { size: 4 })
+ * const generator = gen.vector(gen.sized(10), 4)
  * const result = generator.run({ seed: 0, lcg: gen.lcg})
  * const expected = [0, 3, 2, 7]
  *
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-export declare function vector<A>(gen: Gen<A>, { size }: {
-    size: number;
-}): Gen<Array<A>>;
+export declare function vector<A>(gen: Gen<A>, size: number): Gen<Array<A>>;
 export interface ArrayOptions {
     min?: number;
     max?: number;

@@ -10,14 +10,14 @@ import { number } from "./number";
  * import * as gen from "@waynevanson/generator"
  * import * as assert from "assert"
  *
- * const generator = gen.vector(gen.sized(10), { size: 4 })
+ * const generator = gen.vector(gen.sized(10), 4)
  * const result = generator.run({ seed: 0, lcg: gen.lcg})
  * const expected = [0, 3, 2, 7]
  *
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-export function vector(gen, { size }) {
+export function vector(gen, size) {
     return new Gen((state1) => {
         const result = [];
         let value1;
