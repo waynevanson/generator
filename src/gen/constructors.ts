@@ -1,6 +1,6 @@
-import { Gen, State } from "./class"
+import { Gen } from "./class"
 import { seeded } from "./instances"
-import { NumberOptions, number } from "./number"
+import { NumberOptions, number, positive } from "./number"
 
 /**
  * @summary Returns an array of a fixed size with data from the generator.
@@ -33,8 +33,8 @@ export function vector<A>(gen: Gen<A>, size: number): Gen<Array<A>> {
 export interface ArrayOptions {
   min?: number
   max?: number
-  size?: number
   bias?: number
+  influence?: number
 }
 
 /**
@@ -46,18 +46,20 @@ export interface ArrayOptions {
  * import * as gen from "@waynevanson/generator"
  * import * as assert from "assert"
  *
- * const generator = gen.vector(gen.sized(10), { size: 4 })
+ * const generator = gen.array(gen.sized(10), { min: 3, max:4})
  * const result = generator.run({ seed: 0, lcg: gen.lcg})
- * const expected = [0, 3, 2, 7]
+ * const expected = [2, 7, 4]
  *
  * assert.deepStrictEqual(result, expected)
  * ```
  */
 export function array<A>(
   gen: Gen<A>,
-  { min = 0, max = 50, size = 25, bias = 0 }: ArrayOptions = {}
+  { min = 0, max = 50, bias, influence }: ArrayOptions = {}
 ): Gen<Array<A>> {
-  return number({ min, max }).chain((size) => vector(gen, { size }))
+  return positive({ min, max, bias, influence }).chain((size) =>
+    vector(gen, Math.round(size))
+  )
 }
 
 /**
@@ -255,7 +257,7 @@ export interface StringOptions extends CharOptions, NumberOptions {}
  *
  * const generator = gen.string({ from: 'a', to: 'z', min: 1, max: 10 })
  * const result = generator.run({ seed: 1357954837, lcg: gen.lcg})
- * const expected = 'xxeu'
+ * const expected = 'xeuu'
  *
  * assert.deepStrictEqual(result, expected)
  * ```
@@ -283,7 +285,7 @@ export function string({
  * const generator = gen.lazy(() => string)
  * const string = gen.string({ from: 'a', to: 'z', min: 1, max: 10 })
  * const result = generator.run({ seed: 1357954837, lcg: gen.lcg})
- * const expected = 'xxeu'
+ * const expected = 'xeuu'
  *
  * assert.deepStrictEqual(result, expected)
  * ```
@@ -305,7 +307,7 @@ export function lazy<A>(thunk: () => Gen<A>): Gen<A> {
  * const expected = [
  *   -1579057621,
  *   'w',
- *   '1lm88RW:\\)RNhk(uDI'
+ *   'lm88RW:\\)RNhk(uDIr'
  * ]
  *
  * assert.deepStrictEqual(result, expected)
@@ -344,7 +346,7 @@ export function tuple<T extends [unknown, ...Array<unknown>]>(
  * const expected = {
  *   first: -1579057621,
  *   second: 'w',
- *   third: '1lm88RW:\\)RNhk(uDI'
+ *   third: 'lm88RW:\\)RNhk(uDIr'
  * }
  *
  * assert.deepStrictEqual(result, expected)
@@ -378,11 +380,11 @@ export function required<T extends Record<string, unknown>>(gens: {
  * const generator = gen.record(gen.char() ,gen.string({ max: 20}), { min:4, max: 8})
  * const result = generator.run({ seed: 1357954837, lcg: gen.lcg})
  * const expected = {
- *   '6': 'AQ',
- *   '?': 'Q/0',
- *   j: '%`/Z\\)!/p',
- *   r: 'L|=`D9sA',
- *   w: '1lm88RW:\\)RNhk(uDI'
+ *    '!': '6(A',
+ *   W: ')RNhk(',
+ *   s: 'H%`/Z\\)',
+ *   u: 'rGL|=`D9',
+ *   v: 'm88R'
  * }
  *
  * assert.deepStrictEqual(result, expected)
@@ -421,7 +423,7 @@ export function record<K extends string, A>(
  * const result = generator.run({ seed: 2978653158, lcg: gen.lcg})
  * const expected = {
  *   second: 'm',
- *   third: 'j-gL1>*mKFi0j>c5:r'
+ *   third: '-gL1>*mKFi0j>c5:r,'
  * }
  *
  * assert.deepStrictEqual(result, expected)

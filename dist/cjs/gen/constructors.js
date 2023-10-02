@@ -42,15 +42,15 @@ exports.vector = vector;
  * import * as gen from "@waynevanson/generator"
  * import * as assert from "assert"
  *
- * const generator = gen.vector(gen.sized(10), { size: 4 })
+ * const generator = gen.array(gen.sized(10), { min: 3, max:4})
  * const result = generator.run({ seed: 0, lcg: gen.lcg})
- * const expected = [0, 3, 2, 7]
+ * const expected = [2, 7, 4]
  *
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-function array(gen, { min = 0, max = 50, size = 25, bias = 0 } = {}) {
-    return (0, number_1.number)({ min, max }).chain((size) => vector(gen, { size }));
+function array(gen, { min = 0, max = 50, bias, influence } = {}) {
+    return (0, number_1.positive)({ min, max, bias, influence }).chain((size) => vector(gen, Math.round(size)));
 }
 exports.array = array;
 /**
@@ -230,7 +230,7 @@ exports.char = char;
  *
  * const generator = gen.string({ from: 'a', to: 'z', min: 1, max: 10 })
  * const result = generator.run({ seed: 1357954837, lcg: gen.lcg})
- * const expected = 'xxeu'
+ * const expected = 'xeuu'
  *
  * assert.deepStrictEqual(result, expected)
  * ```
@@ -253,7 +253,7 @@ exports.string = string;
  * const generator = gen.lazy(() => string)
  * const string = gen.string({ from: 'a', to: 'z', min: 1, max: 10 })
  * const result = generator.run({ seed: 1357954837, lcg: gen.lcg})
- * const expected = 'xxeu'
+ * const expected = 'xeuu'
  *
  * assert.deepStrictEqual(result, expected)
  * ```
@@ -275,7 +275,7 @@ exports.lazy = lazy;
  * const expected = [
  *   -1579057621,
  *   'w',
- *   '1lm88RW:\\)RNhk(uDI'
+ *   'lm88RW:\\)RNhk(uDIr'
  * ]
  *
  * assert.deepStrictEqual(result, expected)
@@ -311,7 +311,7 @@ exports.tuple = tuple;
  * const expected = {
  *   first: -1579057621,
  *   second: 'w',
- *   third: '1lm88RW:\\)RNhk(uDI'
+ *   third: 'lm88RW:\\)RNhk(uDIr'
  * }
  *
  * assert.deepStrictEqual(result, expected)
@@ -341,11 +341,11 @@ exports.required = required;
  * const generator = gen.record(gen.char() ,gen.string({ max: 20}), { min:4, max: 8})
  * const result = generator.run({ seed: 1357954837, lcg: gen.lcg})
  * const expected = {
- *   '6': 'AQ',
- *   '?': 'Q/0',
- *   j: '%`/Z\\)!/p',
- *   r: 'L|=`D9sA',
- *   w: '1lm88RW:\\)RNhk(uDI'
+ *    '!': '6(A',
+ *   W: ')RNhk(',
+ *   s: 'H%`/Z\\)',
+ *   u: 'rGL|=`D9',
+ *   v: 'm88R'
  * }
  *
  * assert.deepStrictEqual(result, expected)
@@ -378,7 +378,7 @@ exports.record = record;
  * const result = generator.run({ seed: 2978653158, lcg: gen.lcg})
  * const expected = {
  *   second: 'm',
- *   third: 'j-gL1>*mKFi0j>c5:r'
+ *   third: '-gL1>*mKFi0j>c5:r,'
  * }
  *
  * assert.deepStrictEqual(result, expected)
