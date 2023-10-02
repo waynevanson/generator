@@ -168,7 +168,7 @@ export function sized(max) {
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-export const boolean = sized(2).map((number) => !number);
+export const boolean = sized(2).map((number) => number % 2 === 0);
 /**
  * @summary
  * Creates a generator will return one of the constants provided.

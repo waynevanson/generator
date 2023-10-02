@@ -178,7 +178,7 @@ exports.sized = sized;
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-exports.boolean = sized(2).map((number) => !number);
+exports.boolean = sized(2).map((number) => number % 2 === 0);
 /**
  * @summary
  * Creates a generator will return one of the constants provided.

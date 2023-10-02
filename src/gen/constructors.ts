@@ -187,7 +187,7 @@ export function sized(max: number): Gen<number> {
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-export const boolean = sized(2).map((number) => !number)
+export const boolean = sized(2).map((number) => number % 2 === 0)
 
 /**
  * @summary
