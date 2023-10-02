@@ -105,7 +105,7 @@ export function undefinable(gen) {
  * ```
  */
 export function optional(gen) {
-    const none = constants(undefined, null);
+    const none = constants([undefined, null]);
     return boolean.chain((boolean) => (boolean ? gen : none));
 }
 /**
@@ -180,14 +180,14 @@ export const boolean = sized(2).map((number) => !number);
  * import * as gen from "@waynevanson/generator"
  * import * as assert from "node:assert"
  *
- * const generator = gen.constants("hello", "world")
+ * const generator = gen.constants(["hello", "world"])
  * const result = generator.run({ seed: 0, lcg: gen.lcg})
  * const expected = "hello"
  *
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-export function constants(...values) {
+export function constants(values) {
     return sized(values.length).map((index) => values[index]);
 }
 /**

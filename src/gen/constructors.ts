@@ -122,7 +122,7 @@ export function undefinable<A>(gen: Gen<A>): Gen<A | undefined> {
  * ```
  */
 export function optional<A>(gen: Gen<A>): Gen<A | null | undefined> {
-  const none = constants(undefined, null)
+  const none = constants([undefined, null])
   return boolean.chain((boolean) => (boolean ? gen : none))
 }
 
@@ -201,7 +201,7 @@ export const boolean = sized(2).map((number) => !number)
  * import * as gen from "@waynevanson/generator"
  * import * as assert from "node:assert"
  *
- * const generator = gen.constants("hello", "world")
+ * const generator = gen.constants(["hello", "world"])
  * const result = generator.run({ seed: 0, lcg: gen.lcg})
  * const expected = "hello"
  *
@@ -209,7 +209,7 @@ export const boolean = sized(2).map((number) => !number)
  * ```
  */
 export function constants<T extends [unknown, ...Array<unknown>]>(
-  ...values: T
+  values: T
 ): Gen<T[number]> {
   return sized(values.length).map((index) => values[index])
 }

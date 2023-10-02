@@ -161,14 +161,14 @@ export declare const boolean: Gen<boolean>;
  * import * as gen from "@waynevanson/generator"
  * import * as assert from "node:assert"
  *
- * const generator = gen.constants("hello", "world")
+ * const generator = gen.constants(["hello", "world"])
  * const result = generator.run({ seed: 0, lcg: gen.lcg})
  * const expected = "hello"
  *
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-export declare function constants<T extends [unknown, ...Array<unknown>]>(...values: T): Gen<T[number]>;
+export declare function constants<T extends [unknown, ...Array<unknown>]>(values: T): Gen<T[number]>;
 export interface CharOptions {
     from?: string;
     to?: string;
