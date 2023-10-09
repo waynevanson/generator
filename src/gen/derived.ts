@@ -1,5 +1,5 @@
 import { Gen } from "./class"
-import { seeded } from "./instances"
+import { seeded } from "./foundation"
 import { NumberOptions, number, positive } from "./number"
 
 /**

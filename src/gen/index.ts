@@ -1,4 +1,4 @@
 export * from "./class"
-export * from "./constructors"
-export * from "./instances"
+export * from "./derived"
+export * from "./foundation"
 export * from "./number"
