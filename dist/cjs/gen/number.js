@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.number = exports.negative = exports.positive = exports.decimal = void 0;
-const instances_1 = require("./instances");
+const foundation_1 = require("./foundation");
 function clamp(number, { min, max }) {
     return number >= max ? max : number <= min ? min : number;
 }
@@ -38,7 +38,7 @@ function createScaler(source, target) {
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-exports.decimal = instances_1.stated.map(({ seed, lcg }) => seed / (lcg.m - 1));
+exports.decimal = foundation_1.stated.map(({ seed, lcg }) => seed / (lcg.m - 1));
 function biasByMix(value, { bias, mix }) {
     return value * (1 - mix) + bias * mix;
 }
@@ -70,7 +70,7 @@ function positive(options) {
     }
     bias = 0;
     const target = { min, max };
-    return instances_1.stated
+    return foundation_1.stated
         .doApply("mix", exports.decimal.map((decimal) => decimal * (influence ?? 1)))
         .map(({ seed, lcg, mix }) => {
         const source = { min: 0, max: lcg.m - 1 };
@@ -126,7 +126,7 @@ exports.negative = negative;
 // https://stackoverflow.com/questions/29325069/how-to-generate-random-numbers-biased-towards-one-value-in-a-range
 function number({ min = -(2 ** 32), max = 2 ** 32, } = {}) {
     const target = { min, max };
-    return instances_1.stated.map(({ seed, lcg }) => {
+    return foundation_1.stated.map(({ seed, lcg }) => {
         const source = { min: 0, max: lcg.m - 1 };
         const scaler = createScaler(source, target);
         const unrounded = scaler(seed);

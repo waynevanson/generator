@@ -1,5 +1,5 @@
 import { Gen } from "./class"
-import { seeded } from "./foundation"
+import { seeded, stated } from "./foundation"
 import { NumberOptions, number, positive } from "./number"
 
 /**
@@ -187,7 +187,7 @@ export function sized(max: number): Gen<number> {
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-export const boolean = sized(2).map((number) => number % 2 === 0)
+export const boolean = stated.map(({ seed, lcg: { m } }) => seed < m / 2)
 
 /**
  * @summary
@@ -422,8 +422,9 @@ export function record<K extends string, A>(
  * })
  * const result = generator.run({ seed: 2978653158, lcg: gen.lcg})
  * const expected = {
- *   second: 'm',
- *   third: '-gL1>*mKFi0j>c5:r,'
+ *   first: -25570277,
+ *   second: 'R',
+ *   third: 'gL1>*mKFi0j>c5:r'
  * }
  *
  * assert.deepStrictEqual(result, expected)

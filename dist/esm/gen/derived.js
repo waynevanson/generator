@@ -1,9 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.sequence = exports.union = exports.intersect = exports.partial = exports.record = exports.required = exports.tuple = exports.lazy = exports.string = exports.char = exports.constants = exports.boolean = exports.sized = exports.of = exports.optional = exports.undefinable = exports.nullable = exports.array = exports.vector = void 0;
-const class_1 = require("./class");
-const instances_1 = require("./instances");
-const number_1 = require("./number");
+import { Gen } from "./class";
+import { seeded, stated } from "./foundation";
+import { number, positive } from "./number";
 /**
  * @summary Returns an array of a fixed size with data from the generator.
  * @categoy Combinator
@@ -20,8 +17,8 @@ const number_1 = require("./number");
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-function vector(gen, size) {
-    return new class_1.Gen((state1) => {
+export function vector(gen, size) {
+    return new Gen((state1) => {
         const result = [];
         let value1;
         for (const _ of new Array(size)) {
@@ -32,7 +29,6 @@ function vector(gen, size) {
         return [result, state1];
     });
 }
-exports.vector = vector;
 /**
  * @summary Returns an array of a fixed size with data from the generator.
  * @categoy Combinator
@@ -49,10 +45,9 @@ exports.vector = vector;
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-function array(gen, { min = 0, max = 50, bias, influence } = {}) {
-    return (0, number_1.positive)({ min, max, bias, influence }).chain((size) => vector(gen, Math.round(size)));
+export function array(gen, { min = 0, max = 50, bias, influence } = {}) {
+    return positive({ min, max, bias, influence }).chain((size) => vector(gen, Math.round(size)));
 }
-exports.array = array;
 /**
  * @summary Allows the value of a generator to be `null`
  * @category Combinator
@@ -69,11 +64,10 @@ exports.array = array;
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-function nullable(gen) {
+export function nullable(gen) {
     const none = of(null);
-    return exports.boolean.chain((boolean) => (boolean ? gen : none));
+    return boolean.chain((boolean) => (boolean ? gen : none));
 }
-exports.nullable = nullable;
 /**
  * @summary Allows the value of a generator to be `undefined`
  * @category Combinator
@@ -90,11 +84,10 @@ exports.nullable = nullable;
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-function undefinable(gen) {
+export function undefinable(gen) {
     const none = of(undefined);
-    return exports.boolean.chain((boolean) => (boolean ? gen : none));
+    return boolean.chain((boolean) => (boolean ? gen : none));
 }
-exports.undefinable = undefinable;
 /**
  * @summary Allows the value of a generator to be `null` or `undefined`
  * @category Combinator
@@ -111,11 +104,10 @@ exports.undefinable = undefinable;
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-function optional(gen) {
+export function optional(gen) {
     const none = constants([undefined, null]);
-    return exports.boolean.chain((boolean) => (boolean ? gen : none));
+    return boolean.chain((boolean) => (boolean ? gen : none));
 }
-exports.optional = optional;
 /**
  * @summary Creates a generator where the vaue is of type A.
  * @category Constructor
@@ -132,10 +124,9 @@ exports.optional = optional;
  * assert.deepStrictEqual(result, value)
  * ```
  */
-function of(value) {
-    return new class_1.Gen((state) => [value, state]);
+export function of(value) {
+    return new Gen((state) => [value, state]);
 }
-exports.of = of;
 /**
  * @summary
  * Creates a generator that contains `max` amount of values
@@ -155,10 +146,9 @@ exports.of = of;
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-function sized(max) {
-    return instances_1.seeded.map((number) => number % max);
+export function sized(max) {
+    return seeded.map((number) => number % max);
 }
-exports.sized = sized;
 /**
  * @summary
  * Creates a generator that contains `max` amount of values
@@ -178,7 +168,7 @@ exports.sized = sized;
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-exports.boolean = sized(2).map((number) => number % 2 === 0);
+export const boolean = stated.map(({ seed, lcg: { m } }) => seed < m / 2);
 /**
  * @summary
  * Creates a generator will return one of the constants provided.
@@ -197,10 +187,9 @@ exports.boolean = sized(2).map((number) => number % 2 === 0);
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-function constants(values) {
+export function constants(values) {
     return sized(values.length).map((index) => values[index]);
 }
-exports.constants = constants;
 /**
  * @summary Generates a number within a range
  * @category Constructor
@@ -216,10 +205,9 @@ exports.constants = constants;
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-function char({ from = " ", to = "~" } = {}) {
-    return (0, number_1.number)({ min: from.charCodeAt(0), max: to.charCodeAt(0) }).map((number) => String.fromCharCode(number));
+export function char({ from = " ", to = "~" } = {}) {
+    return number({ min: from.charCodeAt(0), max: to.charCodeAt(0) }).map((number) => String.fromCharCode(number));
 }
-exports.char = char;
 /**
  * @summary Generates a number within a range
  * @category Constructor
@@ -235,10 +223,9 @@ exports.char = char;
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-function string({ from = " ", to = "~", min = 0, max = 100, } = {}) {
+export function string({ from = " ", to = "~", min = 0, max = 100, } = {}) {
     return array(char({ from, to }), { min, max }).map((chars) => chars.join(""));
 }
-exports.string = string;
 /**
  * @summary
  * Returns the generator but allows it to be referenced before it is initialised,
@@ -258,10 +245,9 @@ exports.string = string;
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-function lazy(thunk) {
-    return new class_1.Gen((state) => thunk().stateful(state));
+export function lazy(thunk) {
+    return new Gen((state) => thunk().stateful(state));
 }
-exports.lazy = lazy;
 /**
  * @summary Generates a tuple containing each generator's value.
  * @category Combinator
@@ -281,8 +267,8 @@ exports.lazy = lazy;
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-function tuple(gens) {
-    return new class_1.Gen((state1) => {
+export function tuple(gens) {
+    return new Gen((state1) => {
         const result = [];
         let value1;
         for (const gen of gens) {
@@ -293,7 +279,6 @@ function tuple(gens) {
         return [result, state1];
     });
 }
-exports.tuple = tuple;
 /**
  * @summary Generates a tuple containing each generator's value.
  * @category Combinator
@@ -317,8 +302,8 @@ exports.tuple = tuple;
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-function required(gens) {
-    return new class_1.Gen((state1) => {
+export function required(gens) {
+    return new Gen((state1) => {
         const result = {};
         let value1;
         for (const property of Object.keys(gens)) {
@@ -329,7 +314,6 @@ function required(gens) {
         return [result, state1];
     });
 }
-exports.required = required;
 /**
  * @summary Generates an object containing each generator's value with fixed keys.
  * @category Combinator
@@ -351,13 +335,12 @@ exports.required = required;
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-function record(property, value, range) {
+export function record(property, value, range) {
     return array(tuple([property, value]), range).map((entries) => entries.reduce((result, [property, value]) => {
         result[property] = value;
         return result;
     }, {}));
 }
-exports.record = record;
 /**
  * @summary
  * Generates an object containing each generator's value with fixed keys
@@ -377,22 +360,23 @@ exports.record = record;
  * })
  * const result = generator.run({ seed: 2978653158, lcg: gen.lcg})
  * const expected = {
- *   second: 'm',
- *   third: '-gL1>*mKFi0j>c5:r,'
+ *   first: -25570277,
+ *   second: 'R',
+ *   third: 'gL1>*mKFi0j>c5:r'
  * }
  *
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-function partial(gens) {
-    return new class_1.Gen((state) => {
+export function partial(gens) {
+    return new Gen((state) => {
         const gensByProperty = Object.keys(gens);
         const result = {};
         let value;
         let skip;
         for (const property of gensByProperty) {
             ;
-            [skip, state] = exports.boolean.stateful(state);
+            [skip, state] = boolean.stateful(state);
             if (skip)
                 continue;
             const gen = gens[property];
@@ -402,7 +386,6 @@ function partial(gens) {
         return [result, state];
     });
 }
-exports.partial = partial;
 /**
  * @summary
  * Merges the keys and values of two objects.
@@ -430,10 +413,9 @@ exports.partial = partial;
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-function intersect(first, second) {
+export function intersect(first, second) {
     return tuple([first, second]).map(([first, second]) => Object.assign(first, second));
 }
-exports.intersect = intersect;
 /**
  * @summary
  * Merges the keys and values of two objects.
@@ -460,10 +442,9 @@ exports.intersect = intersect;
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-function union(first, second) {
-    return exports.boolean.chain((boolean) => (boolean ? first : second));
+export function union(first, second) {
+    return boolean.chain((boolean) => (boolean ? first : second));
 }
-exports.union = union;
 /**
  * @summary
  * Transforms an array of generators into a generator that contains an array.
@@ -483,8 +464,8 @@ exports.union = union;
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-function sequence(gens) {
-    return new class_1.Gen((state) => {
+export function sequence(gens) {
+    return new Gen((state) => {
         const results = [];
         let value;
         for (const gen of gens) {
@@ -495,4 +476,3 @@ function sequence(gens) {
         return [results, state];
     });
 }
-exports.sequence = sequence;
