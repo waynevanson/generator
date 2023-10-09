@@ -14,9 +14,26 @@ import { Gen } from "./class";
  * ```
  */
 export declare const decimal: Gen<number>;
-export interface PositiveOptions {
+export interface PositiveOptions extends PositiveOptionsDefaults, PositiveOptionsPartial {
+}
+export interface PositiveOptionsDefaults {
+    /**
+     * @default 0
+     */
     min?: number;
+    /**
+     * @default 4294967296
+     */
     max?: number;
+    /**
+     * @summary Skips validation check for options.
+     * @remarks
+     * Useful for increased performance when created inside of another generator.
+     * @default false
+     */
+    unchecked?: boolean;
+}
+export interface PositiveOptionsPartial {
     /**
      * @default undefined
      */
@@ -25,13 +42,6 @@ export interface PositiveOptions {
      * @default undefined
      */
     influence?: number;
-    /**
-     * @summary Skips validation check for options.
-     * @remarks
-     * Useful for increased performance when created inside of another generator.
-     * @default false
-     */
-    unchecked?: boolean;
 }
 export declare function positive(options?: PositiveOptions): Gen<number>;
 export declare function negative({ min, max, bias, influence, unchecked, }?: {

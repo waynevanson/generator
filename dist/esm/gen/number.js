@@ -39,8 +39,8 @@ export const decimal = stated.map(({ seed, lcg }) => seed / (lcg.m - 1));
 function biasByMix(value, { bias, mix }) {
     return value * (1 - mix) + bias * mix;
 }
-export function positive(options) {
-    let { min = 0, max = 2 ** 32, bias, influence, unchecked = false, } = options ?? {};
+function verifyPositiveArguments(options) {
+    const { min = 0, max = 2 ** 32, unchecked = false, bias, influence, } = options ?? {};
     if (!unchecked) {
         if (min < 0)
             throw new Error(`Minimum value of ${min} should not be less than 0`);
@@ -65,7 +65,16 @@ export function positive(options) {
                 throw new Error(`Bias should not be defined (${bias}) when the influence is not defined`);
         }
     }
-    bias = 0;
+    return {
+        max,
+        min,
+        unchecked,
+        bias,
+        influence,
+    };
+}
+export function positive(options) {
+    const { max, min, bias, influence } = verifyPositiveArguments(options);
     const target = { min, max };
     return stated
         .doApply("mix", decimal.map((decimal) => decimal * (influence ?? 1)))
@@ -73,11 +82,12 @@ export function positive(options) {
         const source = { min: 0, max: lcg.m - 1 };
         const scaler = createPositiveScaler(source, target);
         const unbiased = scaler(seed);
-        return influence !== undefined
-            ? biasByMix(unbiased, { bias: bias, mix })
+        return influence != null
+            ? biasByMix(unbiased, { bias: bias ?? 0, mix })
             : unbiased;
     });
 }
+// todo - add more
 export function negative({ min = -(2 ** 32), max = 0, bias = -0, influence = 0, unchecked = false, } = {}) {
     if (!unchecked) {
         if (min > 0)
@@ -100,7 +110,7 @@ export function negative({ min = -(2 ** 32), max = 0, bias = -0, influence = 0, 
         max: -min,
         bias: -bias,
         influence,
-        unchecked: true,
+        unchecked,
     }).map((positive) => -positive);
 }
 /**

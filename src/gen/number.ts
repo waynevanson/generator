@@ -59,17 +59,19 @@ function biasByMix(
   return value * (1 - mix) + bias * mix
 }
 
-export interface PositiveOptions {
+export interface PositiveOptions
+  extends PositiveOptionsDefaults,
+    PositiveOptionsPartial {}
+
+export interface PositiveOptionsDefaults {
+  /**
+   * @default 0
+   */
   min?: number
+  /**
+   * @default 4294967296
+   */
   max?: number
-  /**
-   * @default undefined
-   */
-  bias?: number
-  /**
-   * @default undefined
-   */
-  influence?: number
   /**
    * @summary Skips validation check for options.
    * @remarks
@@ -79,13 +81,29 @@ export interface PositiveOptions {
   unchecked?: boolean
 }
 
-export function positive(options?: PositiveOptions): Gen<number> {
-  let {
+export interface PositiveOptionsPartial {
+  /**
+   * @default undefined
+   */
+  bias?: number
+  /**
+   * @default undefined
+   */
+  influence?: number
+}
+
+type PositiveOptionsVerified = Required<PositiveOptionsDefaults> &
+  PositiveOptionsPartial
+
+function verifyPositiveArguments(
+  options?: PositiveOptions
+): PositiveOptionsVerified {
+  const {
     min = 0,
     max = 2 ** 32,
+    unchecked = false,
     bias,
     influence,
-    unchecked = false,
   } = options ?? {}
 
   if (!unchecked) {
@@ -127,7 +145,17 @@ export function positive(options?: PositiveOptions): Gen<number> {
     }
   }
 
-  bias = 0
+  return {
+    max,
+    min,
+    unchecked,
+    bias,
+    influence,
+  }
+}
+
+export function positive(options?: PositiveOptions): Gen<number> {
+  const { max, min, bias, influence } = verifyPositiveArguments(options)
 
   const target = { min, max }
   return stated
@@ -139,12 +167,13 @@ export function positive(options?: PositiveOptions): Gen<number> {
       const source = { min: 0, max: lcg.m - 1 }
       const scaler = createPositiveScaler(source, target)
       const unbiased = scaler(seed)
-      return influence !== undefined
-        ? biasByMix(unbiased, { bias: bias as number, mix })
+      return influence != null
+        ? biasByMix(unbiased, { bias: bias ?? 0, mix })
         : unbiased
     })
 }
 
+// todo - add more
 export function negative({
   min = -(2 ** 32),
   max = 0,
@@ -175,7 +204,7 @@ export function negative({
     max: -min,
     bias: -bias,
     influence,
-    unchecked: true,
+    unchecked,
   }).map((positive) => -positive)
 }
 
