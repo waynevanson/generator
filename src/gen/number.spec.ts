@@ -1,7 +1,6 @@
 import { Gen } from "./class"
 import { decimal, negative, number, positive } from "./number"
 import { lcg } from "../lcg"
-import "jest-extended"
 
 describe("decimal", () => {
   it("should generate numbers between 0 and 1", () => {

@@ -8,7 +8,7 @@ const config: Config = {
       displayName: "spec",
       preset: "ts-jest/presets/js-with-ts",
       testMatch: ["<rootDir>/src/**/*.spec.ts"],
-      setupFilesAfterEnv: ["jest-extended/all"],
+      setupFilesAfterEnv: ["./jest-setup.ts"],
     },
   ],
 }
