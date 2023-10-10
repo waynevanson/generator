@@ -1,5 +1,5 @@
 import { Gen } from "./class"
-import { stated } from "./foundation"
+import { stated } from "./functions"
 
 interface Range extends Record<"min" | "max", number> {}
 

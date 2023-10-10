@@ -10,11 +10,6 @@ const config: Config = {
       testMatch: ["<rootDir>/src/**/*.spec.ts"],
       setupFilesAfterEnv: ["jest-extended/all"],
     },
-    {
-      displayName: "docs",
-      runner: "./scripts/jest-runner-docs/entry.cjs",
-      testMatch: ["<rootDir>/src/**/*.ts"],
-    },
   ],
 }
 

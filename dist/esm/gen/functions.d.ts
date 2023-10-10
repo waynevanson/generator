@@ -1,9 +1,39 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.sequence = exports.partial = exports.record = exports.required = exports.tuple = exports.lazy = exports.string = exports.char = exports.constants = exports.boolean = exports.sized = exports.of = exports.optional = exports.undefinable = exports.nullable = exports.array = exports.vector = void 0;
-const class_1 = require("./class");
-const foundation_1 = require("./foundation");
-const number_1 = require("./number");
+import { Gen } from "./class";
+import { NumberOptions } from "./number";
+/**
+ * @summary Creates a generator that uses the incoming seed as the value.
+ * @category Instance
+ *
+ * @example
+ * ```js
+ * import * as gen from "@waynevanson/generator"
+ * import * as assert from "node:assert"
+ *
+ * const seed = 0
+ * const generator = gen.seeded
+ * const result = generator.run({ seed, lcg: gen.lcg})
+ *
+ * assert.deepStrictEqual(result, seed)
+ * ```
+ */
+export declare const seeded: Gen<number>;
+/**
+ * @summary Creates a generator that uses the state as the value.
+ * @category Instance
+ *
+ * @example
+ * ```ts
+ * import * as gen from "@waynevanson/generator"
+ * import * as assert from "node:assert"
+ *
+ * const state = { seed: 0, lcg: gen.lcg }
+ * const generator = gen.stated
+ * const result = generator.run(state)
+ *
+ * assert.deepStrictEqual(result, state)
+ * ```
+ */
+export declare const stated: Gen<import("./class").State>;
 /**
  * @summary Returns an array of a fixed size with data from the generator.
  * @categoy Combinator
@@ -20,19 +50,13 @@ const number_1 = require("./number");
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-function vector(gen, size) {
-    return new class_1.Gen((state1) => {
-        const result = [];
-        let value1;
-        for (const _ of new Array(size)) {
-            ;
-            [value1, state1] = gen.stateful(state1);
-            result.push(value1);
-        }
-        return [result, state1];
-    });
+export declare function vector<A>(gen: Gen<A>, size: number): Gen<Array<A>>;
+export interface ArrayOptions {
+    min?: number;
+    max?: number;
+    bias?: number;
+    influence?: number;
 }
-exports.vector = vector;
 /**
  * @summary Returns an array of a fixed size with data from the generator.
  * @categoy Combinator
@@ -49,10 +73,7 @@ exports.vector = vector;
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-function array(gen, { min = 0, max = 50, bias, influence } = {}) {
-    return (0, number_1.positive)({ min, max, bias, influence }).chain((size) => vector(gen, Math.round(size)));
-}
-exports.array = array;
+export declare function array<A>(gen: Gen<A>, { min, max, bias, influence }?: ArrayOptions): Gen<Array<A>>;
 /**
  * @summary Allows the value of a generator to be `null`
  * @category Combinator
@@ -69,11 +90,7 @@ exports.array = array;
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-function nullable(gen) {
-    const none = of(null);
-    return exports.boolean.chain((boolean) => (boolean ? gen : none));
-}
-exports.nullable = nullable;
+export declare function nullable<A>(gen: Gen<A>): Gen<A | null>;
 /**
  * @summary Allows the value of a generator to be `undefined`
  * @category Combinator
@@ -90,11 +107,7 @@ exports.nullable = nullable;
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-function undefinable(gen) {
-    const none = of(undefined);
-    return exports.boolean.chain((boolean) => (boolean ? gen : none));
-}
-exports.undefinable = undefinable;
+export declare function undefinable<A>(gen: Gen<A>): Gen<A | undefined>;
 /**
  * @summary Allows the value of a generator to be `null` or `undefined`
  * @category Combinator
@@ -111,11 +124,7 @@ exports.undefinable = undefinable;
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-function optional(gen) {
-    const none = constants([undefined, null]);
-    return exports.boolean.chain((boolean) => (boolean ? gen : none));
-}
-exports.optional = optional;
+export declare function optional<A>(gen: Gen<A>): Gen<A | null | undefined>;
 /**
  * @summary Creates a generator where the vaue is of type A.
  * @category Constructor
@@ -132,10 +141,7 @@ exports.optional = optional;
  * assert.deepStrictEqual(result, value)
  * ```
  */
-function of(value) {
-    return new class_1.Gen((state) => [value, state]);
-}
-exports.of = of;
+export declare function of<A>(value: A): Gen<A>;
 /**
  * @summary
  * Creates a generator that contains `max` amount of values
@@ -155,10 +161,7 @@ exports.of = of;
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-function sized(max) {
-    return foundation_1.seeded.map((number) => number % max);
-}
-exports.sized = sized;
+export declare function sized(max: number): Gen<number>;
 /**
  * @summary
  * Creates a generator that contains `max` amount of values
@@ -178,7 +181,7 @@ exports.sized = sized;
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-exports.boolean = foundation_1.stated.map(({ seed, lcg: { m } }) => seed < m / 2);
+export declare const boolean: Gen<boolean>;
 /**
  * @summary
  * Creates a generator will return one of the constants provided.
@@ -197,10 +200,11 @@ exports.boolean = foundation_1.stated.map(({ seed, lcg: { m } }) => seed < m / 2
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-function constants(values) {
-    return sized(values.length).map((index) => values[index]);
+export declare function constants<T extends readonly [unknown, ...Array<unknown>]>(values: T): Gen<T[number]>;
+export interface CharOptions {
+    from?: string;
+    to?: string;
 }
-exports.constants = constants;
 /**
  * @summary Generates a number within a range
  * @category Constructor
@@ -216,10 +220,9 @@ exports.constants = constants;
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-function char({ from = " ", to = "~" } = {}) {
-    return (0, number_1.number)({ min: from.charCodeAt(0), max: to.charCodeAt(0) }).map((number) => String.fromCharCode(number));
+export declare function char({ from, to }?: CharOptions): Gen<string>;
+export interface StringOptions extends CharOptions, NumberOptions {
 }
-exports.char = char;
 /**
  * @summary Generates a number within a range
  * @category Constructor
@@ -235,10 +238,7 @@ exports.char = char;
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-function string({ from = " ", to = "~", min = 0, max = 100, } = {}) {
-    return array(char({ from, to }), { min, max }).map((chars) => chars.join(""));
-}
-exports.string = string;
+export declare function string({ from, to, min, max, }?: StringOptions): Gen<string>;
 /**
  * @summary
  * Returns the generator but allows it to be referenced before it is initialised,
@@ -258,10 +258,7 @@ exports.string = string;
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-function lazy(thunk) {
-    return new class_1.Gen((state) => thunk().stateful(state));
-}
-exports.lazy = lazy;
+export declare function lazy<A>(thunk: () => Gen<A>): Gen<A>;
 /**
  * @summary Generates a tuple containing each generator's value.
  * @category Combinator
@@ -281,19 +278,9 @@ exports.lazy = lazy;
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-function tuple(gens) {
-    return new class_1.Gen((state1) => {
-        const result = [];
-        let value1;
-        for (const gen of gens) {
-            ;
-            [value1, state1] = gen.stateful(state1);
-            result.push(value1);
-        }
-        return [result, state1];
-    });
-}
-exports.tuple = tuple;
+export declare function tuple<T extends readonly [unknown, ...Array<unknown>]>(gens: {
+    [P in keyof T]: Gen<T[P]>;
+}): Gen<T>;
 /**
  * @summary Generates a tuple containing each generator's value.
  * @category Combinator
@@ -317,19 +304,9 @@ exports.tuple = tuple;
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-function required(gens) {
-    return new class_1.Gen((state1) => {
-        const result = {};
-        let value1;
-        for (const property of Object.keys(gens)) {
-            const gen = gens[property];
-            [value1, state1] = gen.stateful(state1);
-            result[property] = value1;
-        }
-        return [result, state1];
-    });
-}
-exports.required = required;
+export declare function required<T extends Record<string, unknown>>(gens: {
+    [P in keyof T]: Gen<T[P]>;
+}): Gen<T>;
 /**
  * @summary Generates an object containing each generator's value with fixed keys.
  * @category Combinator
@@ -351,13 +328,7 @@ exports.required = required;
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-function record(property, value, range) {
-    return array(tuple([property, value]), range).map((entries) => entries.reduce((result, [property, value]) => {
-        result[property] = value;
-        return result;
-    }, {}));
-}
-exports.record = record;
+export declare function record<K extends string, A>(property: Gen<K>, value: Gen<A>, range: NumberOptions): Gen<Record<K, A>>;
 /**
  * @summary
  * Generates an object containing each generator's value with fixed keys
@@ -385,25 +356,9 @@ exports.record = record;
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-function partial(gens) {
-    return new class_1.Gen((state) => {
-        const gensByProperty = Object.keys(gens);
-        const result = {};
-        let value;
-        let skip;
-        for (const property of gensByProperty) {
-            ;
-            [skip, state] = exports.boolean.stateful(state);
-            if (skip)
-                continue;
-            const gen = gens[property];
-            [value, state] = gen.stateful(state);
-            result[property] = value;
-        }
-        return [result, state];
-    });
-}
-exports.partial = partial;
+export declare function partial<T extends Record<string, unknown>>(gens: {
+    [P in keyof T]: Gen<T[P]>;
+}): Gen<Partial<T>>;
 /**
  * @summary
  * Transforms an array of generators into a generator that contains an array.
@@ -423,16 +378,4 @@ exports.partial = partial;
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-function sequence(gens) {
-    return new class_1.Gen((state) => {
-        const results = [];
-        let value;
-        for (const gen of gens) {
-            ;
-            [value, state] = gen.stateful(state);
-            results.push(value);
-        }
-        return [results, state];
-    });
-}
-exports.sequence = sequence;
+export declare function sequence<T>(gens: Array<Gen<T>>): Gen<Array<T>>;

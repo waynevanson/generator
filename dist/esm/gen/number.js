@@ -1,4 +1,4 @@
-import { stated } from "./foundation";
+import { stated } from "./functions";
 function clamp(number, { min, max }) {
     return number >= max ? max : number <= min ? min : number;
 }

@@ -1,4 +1,3 @@
 export * from "./class";
-export * from "./derived";
-export * from "./foundation";
+export * from "./functions";
 export * from "./number";
