@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sequence = exports.union = exports.intersect = exports.partial = exports.record = exports.required = exports.tuple = exports.lazy = exports.string = exports.char = exports.constants = exports.boolean = exports.sized = exports.of = exports.optional = exports.undefinable = exports.nullable = exports.array = exports.vector = void 0;
+exports.sequence = exports.partial = exports.record = exports.required = exports.tuple = exports.lazy = exports.string = exports.char = exports.constants = exports.boolean = exports.sized = exports.of = exports.optional = exports.undefinable = exports.nullable = exports.array = exports.vector = void 0;
 const class_1 = require("./class");
 const foundation_1 = require("./foundation");
 const number_1 = require("./number");
@@ -404,68 +404,6 @@ function partial(gens) {
     });
 }
 exports.partial = partial;
-/**
- * @summary
- * Merges the keys and values of two objects.
- *
- * @category Combinator
- *
- * @example
- * ```ts
- * import * as gen from "@waynevanson/generator"
- * import * as assert from "node:assert"
- *
- * const first = gen.required({
- *   one: gen.number()
- * })
- * const second = gen.required({
- *   two: gen.char()
- * })
- * const generator = gen.intersect(first, second)
- * const result = generator.run({ seed: 2978653157, lcg: gen.lcg})
- * const expected = {
- *   one: 1662339019,
- *   two: 'O'
- * }
- *
- * assert.deepStrictEqual(result, expected)
- * ```
- */
-function intersect(first, second) {
-    return tuple([first, second]).map(([first, second]) => Object.assign(first, second));
-}
-exports.intersect = intersect;
-/**
- * @summary
- * Creates a generator that uses one of the provided generators for
- * generating the value.
- *
- * @category Combinator
- *
- * @example
- * ```ts
- * import * as gen from "@waynevanson/generator"
- * import * as assert from "node:assert"
- *
- * const first = gen.required({
- *   one: gen.number()
- * })
- * const second = gen.required({
- *   two: gen.char()
- * })
- * const generator = gen.union(first, second)
- * const result = generator.run({ seed: 2978653157, lcg: gen.lcg})
- * const expected = {
- *  two: 'O'
- * }
- *
- * assert.deepStrictEqual(result, expected)
- * ```
- */
-function union(first, second) {
-    return exports.boolean.chain((boolean) => (boolean ? first : second));
-}
-exports.union = union;
 /**
  * @summary
  * Transforms an array of generators into a generator that contains an array.

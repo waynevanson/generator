@@ -327,62 +327,6 @@ export declare function partial<T extends Record<string, unknown>>(gens: {
 }): Gen<Partial<T>>;
 /**
  * @summary
- * Merges the keys and values of two objects.
- *
- * @category Combinator
- *
- * @example
- * ```ts
- * import * as gen from "@waynevanson/generator"
- * import * as assert from "node:assert"
- *
- * const first = gen.required({
- *   one: gen.number()
- * })
- * const second = gen.required({
- *   two: gen.char()
- * })
- * const generator = gen.intersect(first, second)
- * const result = generator.run({ seed: 2978653157, lcg: gen.lcg})
- * const expected = {
- *   one: 1662339019,
- *   two: 'O'
- * }
- *
- * assert.deepStrictEqual(result, expected)
- * ```
- */
-export declare function intersect<T extends Record<string, unknown>, U extends Record<string, unknown>>(first: Gen<T>, second: Gen<U>): Gen<T & U>;
-/**
- * @summary
- * Creates a generator that uses one of the provided generators for
- * generating the value.
- *
- * @category Combinator
- *
- * @example
- * ```ts
- * import * as gen from "@waynevanson/generator"
- * import * as assert from "node:assert"
- *
- * const first = gen.required({
- *   one: gen.number()
- * })
- * const second = gen.required({
- *   two: gen.char()
- * })
- * const generator = gen.union(first, second)
- * const result = generator.run({ seed: 2978653157, lcg: gen.lcg})
- * const expected = {
- *  two: 'O'
- * }
- *
- * assert.deepStrictEqual(result, expected)
- * ```
- */
-export declare function union<T, U>(first: Gen<T>, second: Gen<U>): Gen<T | U>;
-/**
- * @summary
  * Transforms an array of generators into a generator that contains an array.
  *
  * @category Combinator

@@ -388,66 +388,6 @@ export function partial(gens) {
 }
 /**
  * @summary
- * Merges the keys and values of two objects.
- *
- * @category Combinator
- *
- * @example
- * ```ts
- * import * as gen from "@waynevanson/generator"
- * import * as assert from "node:assert"
- *
- * const first = gen.required({
- *   one: gen.number()
- * })
- * const second = gen.required({
- *   two: gen.char()
- * })
- * const generator = gen.intersect(first, second)
- * const result = generator.run({ seed: 2978653157, lcg: gen.lcg})
- * const expected = {
- *   one: 1662339019,
- *   two: 'O'
- * }
- *
- * assert.deepStrictEqual(result, expected)
- * ```
- */
-export function intersect(first, second) {
-    return tuple([first, second]).map(([first, second]) => Object.assign(first, second));
-}
-/**
- * @summary
- * Creates a generator that uses one of the provided generators for
- * generating the value.
- *
- * @category Combinator
- *
- * @example
- * ```ts
- * import * as gen from "@waynevanson/generator"
- * import * as assert from "node:assert"
- *
- * const first = gen.required({
- *   one: gen.number()
- * })
- * const second = gen.required({
- *   two: gen.char()
- * })
- * const generator = gen.union(first, second)
- * const result = generator.run({ seed: 2978653157, lcg: gen.lcg})
- * const expected = {
- *  two: 'O'
- * }
- *
- * assert.deepStrictEqual(result, expected)
- * ```
- */
-export function union(first, second) {
-    return boolean.chain((boolean) => (boolean ? first : second));
-}
-/**
- * @summary
  * Transforms an array of generators into a generator that contains an array.
  *
  * @category Combinator
