@@ -355,7 +355,8 @@ export declare function partial<T extends Record<string, unknown>>(gens: {
 export declare function intersect<T extends Record<string, unknown>, U extends Record<string, unknown>>(first: Gen<T>, second: Gen<U>): Gen<T & U>;
 /**
  * @summary
- * Merges the keys and values of two objects.
+ * Creates a generator that uses one of the provided generators for
+ * generating the value.
  *
  * @category Combinator
  *

@@ -418,7 +418,8 @@ export function intersect(first, second) {
 }
 /**
  * @summary
- * Merges the keys and values of two objects.
+ * Creates a generator that uses one of the provided generators for
+ * generating the value.
  *
  * @category Combinator
  *

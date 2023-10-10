@@ -1,3 +1,4 @@
+import { stat } from "fs"
 import { Lcg } from "../lcg"
 
 /**
@@ -374,5 +375,80 @@ export class Gen<A> {
       result.push(value)
     }
     return result
+  }
+
+  /**
+   * @summary
+   * Merges the keys and values of two objects.
+   *
+   * @category Combinator
+   *
+   * @example
+   * ```ts
+   * import * as gen from "@waynevanson/generator"
+   * import * as assert from "node:assert"
+   *
+   * const first = gen.required({
+   *   one: gen.number()
+   * })
+   * const second = gen.required({
+   *   two: gen.char()
+   * })
+   * const generator = first.intersect(second)
+   * const result = generator.run({ seed: 2978653157, lcg: gen.lcg})
+   * const expected = {
+   *   one: 1662339019,
+   *   two: 'O'
+   * }
+   *
+   * assert.deepStrictEqual(result, expected)
+   * ```
+   */
+  intersect<B extends Record<string, unknown>>(
+    this: A extends Record<string, unknown> ? Gen<A> : never,
+    and: Gen<B>
+  ): Gen<A & B> {
+    return new Gen((state0) => {
+      const [a, state1] = this.stateful(state0)
+      const [b, state2] = and.stateful(state1)
+      return [Object.assign({}, a, b), state2]
+    })
+  }
+
+  /**
+   * @summary
+   * Creates a generator that uses one of the provided generators for
+   * generating the value.
+   *
+   * @category Combinator
+   *
+   * @example
+   * ```ts
+   * import * as gen from "@waynevanson/generator"
+   * import * as assert from "node:assert"
+   *
+   * const first = gen.required({
+   *   one: gen.number()
+   * })
+   * const second = gen.required({
+   *   two: gen.char()
+   * })
+   * const generator = first.union(second)
+   * const result = generator.run({ seed: 2978653157, lcg: gen.lcg})
+   * const expected = {
+   *  two: 'O'
+   * }
+   *
+   * assert.deepStrictEqual(result, expected)
+   * ```
+   */
+  union<B>(or: Gen<B>): Gen<A | B> {
+    return new Gen(({ seed, lcg }) => {
+      const boolean = seed < lcg.m / 2
+      seed = lcg.increment(seed)
+      return boolean
+        ? this.stateful({ seed, lcg })
+        : (or.stateful({ seed, lcg }) as never)
+    })
   }
 }
