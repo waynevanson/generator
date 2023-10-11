@@ -1,4 +1,4 @@
-import { Gen } from "./class";
+import { Gen } from "../class";
 /**
  * @summary Generates a number betwwen 0 and 1.
  * @category Instance

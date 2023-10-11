@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.number = exports.negative = exports.positive = exports.verifyPositiveArguments = exports.decimal = void 0;
-const functions_1 = require("./functions");
-const util_1 = require("./number/util");
+const functions_1 = require("../functions");
+const util_1 = require("./util");
 /**
  * @summary Generates a number betwwen 0 and 1.
  * @category Instance

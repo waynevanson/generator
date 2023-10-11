@@ -1,6 +1,6 @@
-import { Gen } from "./class"
+import { Gen } from "../class"
 import { decimal, negative, number, positive } from "./number"
-import { lcg } from "../lcg"
+import { lcg } from "../../lcg"
 
 describe("decimal", () => {
   it("should generate numbers between 0 and 1", () => {

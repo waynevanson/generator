@@ -1,6 +1,6 @@
-import { Gen } from "./class"
-import { stated } from "./functions"
-import { createPositiveScaler, createScaler } from "./number/util"
+import { Gen } from "../class"
+import { stated } from "../functions"
+import { createPositiveScaler, createScaler } from "./util"
 
 /**
  * @summary Generates a number betwwen 0 and 1.
