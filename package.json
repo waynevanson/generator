@@ -7,7 +7,8 @@
   "keywords": [
     "generator",
     "prng",
-    "lcg"
+    "lcg",
+    "arbitrary"
   ],
   "files": [
     "dist"

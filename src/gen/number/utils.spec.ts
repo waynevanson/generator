@@ -53,16 +53,19 @@ describe(createPositiveScaler, () => {
   it("should scale a number between ranges if the number is not negative", () => {
     const range = (constraints?: fc.IntegerConstraints) =>
       fc
-        .integer({ min: constraints?.min })
+        .integer({ min: constraints?.min, max: Number.MAX_SAFE_INTEGER })
         .chain((min) =>
           fc
-            .integer({ min, max: constraints?.max })
+            .integer({ min, max: constraints?.max ?? Number.MAX_SAFE_INTEGER })
             .map((max) => ({ min, max }))
         )
 
-    const arb = range({ min: 0 })
+    const arb = range({ min: 0, max: Number.MAX_SAFE_INTEGER })
       .chain((source) =>
-        range({ min: 0 }).map((target) => ({ target, source }))
+        range({ min: 0, max: Number.MAX_SAFE_INTEGER }).map((target) => ({
+          target,
+          source,
+        }))
       )
       .chain((ranges) =>
         fc.integer(ranges.source).map((value) => ({ value, ranges }))
