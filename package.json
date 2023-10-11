@@ -18,7 +18,7 @@
   "types": "dist/index.d.ts",
   "private": false,
   "repository": {
-    "url": "https://github.com/waynevanson/generator"
+    "url": "git+https://github.com/waynevanson/generator.git"
   },
   "scripts": {
     "build": "rm -rf dist && tsc -p tsconfig.build.json",
