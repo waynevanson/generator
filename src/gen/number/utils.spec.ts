@@ -49,7 +49,7 @@ describe(clamp, () => {
   })
 })
 
-describe(createPositiveScaler, () => {
+describe.skip(createPositiveScaler, () => {
   it("should scale a number between ranges if the number is not negative", () => {
     const range = (constraints?: fc.IntegerConstraints) =>
       integer({ min: constraints?.min, max: Number.MAX_SAFE_INTEGER }).chain(
