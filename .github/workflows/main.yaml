@@ -48,10 +48,10 @@ jobs:
       - name: Set NPM registry
         run: npm config set //npm.pkg.github/:_authToken $NPM_TOKEN
         env:
-          NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - if: github.ref == 'refs/heads/main'
         run: pnpm exec release-it
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
