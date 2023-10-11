@@ -26,8 +26,7 @@ jobs:
       - run: pnpm build
       - run: pnpm test
       - if: github.ref == 'refs/heads/main'
-        run: pnpm exec semantic-release
+        run: pnpm exec release-it
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          GH_TOKEN: ${{ github.token }}
           GITHUB_TOKEN: ${{ github.token }}
