@@ -38,7 +38,7 @@ jobs:
       - run: pnpm test
       - run: npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
       - if: github.ref == 'refs/heads/main'
-        run: pnpm exec release-it -d
+        run: pnpm exec release-it
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ github.token }}
