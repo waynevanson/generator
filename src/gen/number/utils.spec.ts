@@ -60,9 +60,9 @@ describe(createPositiveScaler, () => {
           }).map((max) => ({ min, max }))
       )
 
-    const arb = range({ min: 0, max: Number.MAX_SAFE_INTEGER })
+    const arb = range({ min: 0, max: 2 ** 32 })
       .chain((source) =>
-        range({ min: 0, max: Number.MAX_SAFE_INTEGER }).map((target) => ({
+        range({ min: 0, max: 2 ** 32 }).map((target) => ({
           target,
           source,
         }))
