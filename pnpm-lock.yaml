@@ -17,6 +17,9 @@ devDependencies:
   create-jest-runner:
     specifier: ^0.12.3
     version: 0.12.3
+  fast-check:
+    specifier: ^3.13.1
+    version: 3.13.1
   glob:
     specifier: ^10.3.6
     version: 10.3.6
@@ -1369,6 +1372,13 @@ packages:
       jest-matcher-utils: 29.7.0
       jest-message-util: 29.7.0
       jest-util: 29.7.0
+    dev: true
+
+  /fast-check@3.13.1:
+    resolution: {integrity: sha512-Xp00tFuWd83i8rbG/4wU54qU+yINjQha7bXH2N4ARNTkyOimzHtUBJ5+htpdXk7RMaCOD/j2jxSjEt9u9ZPNeQ==}
+    engines: {node: '>=8.0.0'}
+    dependencies:
+      pure-rand: 6.0.3
     dev: true
 
   /fast-json-stable-stringify@2.1.0:

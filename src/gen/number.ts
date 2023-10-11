@@ -1,40 +1,6 @@
 import { Gen } from "./class"
 import { stated } from "./functions"
-
-interface Range extends Record<"min" | "max", number> {}
-
-function clamp(number: number, { min, max }: Range): number {
-  return number >= max ? max : number <= min ? min : number
-}
-
-function createPositiveScaler(
-  source: Range,
-  target: Range
-): (number: number) => number {
-  const top = target.max - target.min
-  const bot = source.max - source.min
-  return (value) => top * ((value - source.min) / bot) + target.min
-}
-
-function createScaler(
-  source: Range,
-  target: Range
-): (number: number) => number {
-  const { min, max } = target
-  const upper = {
-    min: clamp(min, { min: 0, max }),
-    max: clamp(max, { min: 0, max }),
-  }
-  const lower = {
-    min: -clamp(min, { min, max: 0 }),
-    max: -clamp(max, { min, max: 0 }),
-  }
-
-  const createPositive = createPositiveScaler(source, upper)
-  const createNegative = createPositiveScaler(source, lower)
-
-  return (value) => createPositive(value) - createNegative(value)
-}
+import { createPositiveScaler, createScaler } from "./number/util"
 
 /**
  * @summary Generates a number betwwen 0 and 1.
@@ -95,7 +61,8 @@ export interface PositiveOptionsPartial {
 type PositiveOptionsVerified = Required<PositiveOptionsDefaults> &
   PositiveOptionsPartial
 
-function verifyPositiveArguments(
+/** @internal */
+export function verifyPositiveArguments(
   options?: PositiveOptions
 ): PositiveOptionsVerified {
   const {
