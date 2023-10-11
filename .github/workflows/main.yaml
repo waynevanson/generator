@@ -10,15 +10,18 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+
       - name: git config
         run: |
           git config user.name "${GITHUB_ACTOR}"
           git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+
       - name: Setup SSH keys
         uses: shimataro/ssh-key-action@v2
         with:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           known_hosts: github.com
+
       - uses: actions/cache@v3
         name: Setup pnpm cache
         with:
@@ -26,17 +29,27 @@ jobs:
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
+
       - uses: pnpm/action-setup@v2
         with:
           version: 8
+
       - uses: actions/setup-node@v3
         with:
           node-version: 18
           cache: pnpm
+
       - run: pnpm install --frozen-lockfile
+
       - run: pnpm build
+
       - run: pnpm test
-      - run: npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
+
+      - name: Set NPM registry
+        run: npm config set //npm.pkg.github/:_authToken $NPM_TOKEN
+        env:
+          NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - if: github.ref == 'refs/heads/main'
         run: pnpm exec release-it
         env:
