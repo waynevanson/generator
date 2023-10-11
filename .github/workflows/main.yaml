@@ -14,8 +14,8 @@ jobs:
         run: |
           git config user.name "${GITHUB_ACTOR}"
           git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-           - name: Setup SSH keys
-      - uses: shimataro/ssh-key-action@v2
+      - name: Setup SSH keys
+        uses: shimataro/ssh-key-action@v2
         with:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           known_hosts: github.com
