@@ -1,12 +1,14 @@
 import { clamp, createPositiveScaler } from "./util"
 import * as fc from "fast-check"
 
+const integer = (constraints?: fc.IntegerConstraints) =>
+  fc.integer(constraints).filter((a) => !Number.isNaN(a))
+
 describe(clamp, () => {
   it("should keep the same number that is within the range", () => {
-    const range = fc
-      .integer()
-      .chain((min) => fc.integer({ min }).map((max) => ({ min, max })))
-      .chain((range) => fc.integer(range).map((value) => ({ value, range })))
+    const range = integer()
+      .chain((min) => integer({ min }).map((max) => ({ min, max })))
+      .chain((range) => integer(range).map((value) => ({ value, range })))
 
     fc.assert(
       fc.property(range, ({ range, value }) => {
@@ -17,11 +19,10 @@ describe(clamp, () => {
   })
 
   it("should use the min number if the value is at or below the range", () => {
-    const range = fc
-      .integer()
-      .chain((min) => fc.integer({ min }).map((max) => ({ min, max })))
+    const range = integer()
+      .chain((min) => integer({ min }).map((max) => ({ min, max })))
       .chain((range) =>
-        fc.integer({ max: range.min }).map((value) => ({ value, range }))
+        integer({ max: range.min }).map((value) => ({ value, range }))
       )
 
     fc.assert(
@@ -33,11 +34,10 @@ describe(clamp, () => {
   })
 
   it("should use the max number if the value is at or above the range", () => {
-    const range = fc
-      .integer()
-      .chain((min) => fc.integer({ min }).map((max) => ({ min, max })))
+    const range = integer()
+      .chain((min) => integer({ min }).map((max) => ({ min, max })))
       .chain((range) =>
-        fc.integer({ min: range.max }).map((value) => ({ value, range }))
+        integer({ min: range.max }).map((value) => ({ value, range }))
       )
 
     fc.assert(
@@ -52,13 +52,13 @@ describe(clamp, () => {
 describe(createPositiveScaler, () => {
   it("should scale a number between ranges if the number is not negative", () => {
     const range = (constraints?: fc.IntegerConstraints) =>
-      fc
-        .integer({ min: constraints?.min, max: Number.MAX_SAFE_INTEGER })
-        .chain((min) =>
-          fc
-            .integer({ min, max: constraints?.max ?? Number.MAX_SAFE_INTEGER })
-            .map((max) => ({ min, max }))
-        )
+      integer({ min: constraints?.min, max: Number.MAX_SAFE_INTEGER }).chain(
+        (min) =>
+          integer({
+            min,
+            max: constraints?.max ?? Number.MAX_SAFE_INTEGER,
+          }).map((max) => ({ min, max }))
+      )
 
     const arb = range({ min: 0, max: Number.MAX_SAFE_INTEGER })
       .chain((source) =>
@@ -68,7 +68,7 @@ describe(createPositiveScaler, () => {
         }))
       )
       .chain((ranges) =>
-        fc.integer(ranges.source).map((value) => ({ value, ranges }))
+        integer(ranges.source).map((value) => ({ value, ranges }))
       )
 
     fc.assert(
