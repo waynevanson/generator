@@ -1,26 +1,8 @@
-import { stated } from "./functions";
-function clamp(number, { min, max }) {
-    return number >= max ? max : number <= min ? min : number;
-}
-function createPositiveScaler(source, target) {
-    const top = target.max - target.min;
-    const bot = source.max - source.min;
-    return (value) => top * ((value - source.min) / bot) + target.min;
-}
-function createScaler(source, target) {
-    const { min, max } = target;
-    const upper = {
-        min: clamp(min, { min: 0, max }),
-        max: clamp(max, { min: 0, max }),
-    };
-    const lower = {
-        min: -clamp(min, { min, max: 0 }),
-        max: -clamp(max, { min, max: 0 }),
-    };
-    const createPositive = createPositiveScaler(source, upper);
-    const createNegative = createPositiveScaler(source, lower);
-    return (value) => createPositive(value) - createNegative(value);
-}
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.number = exports.negative = exports.positive = exports.verifyPositiveArguments = exports.decimal = void 0;
+const functions_1 = require("./functions");
+const util_1 = require("./number/util");
 /**
  * @summary Generates a number betwwen 0 and 1.
  * @category Instance
@@ -35,12 +17,13 @@ function createScaler(source, target) {
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-export const decimal = stated.map(({ seed, lcg }) => seed / (lcg.m - 1));
+exports.decimal = functions_1.stated.map(({ seed, lcg }) => seed / (lcg.m - 1));
 function biasByMix(value, { bias, mix }) {
     return value * (1 - mix) + bias * mix;
 }
+/** @internal */
 function verifyPositiveArguments(options) {
-    const { min = 0, max = 2 ** 32, unchecked = false, bias, influence, } = options ?? {};
+    const { min = 0, max = Math.pow(2, 32), unchecked = false, bias, influence, } = options !== null && options !== void 0 ? options : {};
     if (!unchecked) {
         if (min < 0)
             throw new Error(`Minimum value of ${min} should not be less than 0`);
@@ -73,22 +56,24 @@ function verifyPositiveArguments(options) {
         influence,
     };
 }
-export function positive(options) {
+exports.verifyPositiveArguments = verifyPositiveArguments;
+function positive(options) {
     const { max, min, bias, influence } = verifyPositiveArguments(options);
     const target = { min, max };
-    return stated
-        .doApply("mix", decimal.map((decimal) => decimal * (influence ?? 1)))
+    return functions_1.stated
+        .doApply("mix", exports.decimal.map((decimal) => decimal * (influence !== null && influence !== void 0 ? influence : 1)))
         .map(({ seed, lcg, mix }) => {
         const source = { min: 0, max: lcg.m - 1 };
-        const scaler = createPositiveScaler(source, target);
+        const scaler = (0, util_1.createPositiveScaler)(source, target);
         const unbiased = scaler(seed);
         return influence != null
-            ? biasByMix(unbiased, { bias: bias ?? 0, mix })
+            ? biasByMix(unbiased, { bias: bias !== null && bias !== void 0 ? bias : 0, mix })
             : unbiased;
     });
 }
+exports.positive = positive;
 // todo - add more
-export function negative({ min = -(2 ** 32), max = 0, bias = -0, influence = 0, unchecked = false, } = {}) {
+function negative({ min = -(Math.pow(2, 32)), max = 0, bias = -0, influence = 0, unchecked = false, } = {}) {
     if (!unchecked) {
         if (min > 0)
             throw new Error(`Minimum value of ${min} should not be greater than 0`);
@@ -113,6 +98,7 @@ export function negative({ min = -(2 ** 32), max = 0, bias = -0, influence = 0, 
         unchecked,
     }).map((positive) => -positive);
 }
+exports.negative = negative;
 /**
  * @summary Generates a number within a range
  * @category Constructor
@@ -129,12 +115,13 @@ export function negative({ min = -(2 ** 32), max = 0, bias = -0, influence = 0, 
  * ```
  */
 // https://stackoverflow.com/questions/29325069/how-to-generate-random-numbers-biased-towards-one-value-in-a-range
-export function number({ min = -(2 ** 32), max = 2 ** 32, } = {}) {
+function number({ min = -(Math.pow(2, 32)), max = Math.pow(2, 32), } = {}) {
     const target = { min, max };
-    return stated.map(({ seed, lcg }) => {
+    return functions_1.stated.map(({ seed, lcg }) => {
         const source = { min: 0, max: lcg.m - 1 };
-        const scaler = createScaler(source, target);
+        const scaler = (0, util_1.createScaler)(source, target);
         const unrounded = scaler(seed);
         return Math.round(unrounded);
     });
 }
+exports.number = number;

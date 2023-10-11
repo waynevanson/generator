@@ -13,7 +13,6 @@ exports.Gen = void 0;
  * To compose the generator's data without consuming it, consider using the combinators.
  */
 class Gen {
-    stateful;
     constructor(stateful) {
         this.stateful = stateful;
     }

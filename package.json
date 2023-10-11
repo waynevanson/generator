@@ -13,17 +13,14 @@
     "dist"
   ],
   "sideEffects": false,
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
-  "types": "dist/esm/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "private": false,
   "repository": {
     "url": "https://github.com/waynevanson/generator"
   },
   "scripts": {
-    "build": "rm -rf dist && run-p build:*",
-    "build:esm": "tsc -p tsconfig.esm.json",
-    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build": "rm -rf dist && tsc -p tsconfig.build.json",
     "test": "jest"
   },
   "devDependencies": {

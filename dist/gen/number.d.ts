@@ -43,6 +43,9 @@ export interface PositiveOptionsPartial {
      */
     influence?: number;
 }
+type PositiveOptionsVerified = Required<PositiveOptionsDefaults> & PositiveOptionsPartial;
+/** @internal */
+export declare function verifyPositiveArguments(options?: PositiveOptions): PositiveOptionsVerified;
 export declare function positive(options?: PositiveOptions): Gen<number>;
 export declare function negative({ min, max, bias, influence, unchecked, }?: {
     min?: number | undefined;
@@ -79,3 +82,4 @@ export interface NumberOptions {
  * ```
  */
 export declare function number({ min, max, }?: NumberOptions): Gen<number>;
+export {};

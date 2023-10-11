@@ -6,9 +6,6 @@ exports.lcg = exports.Lcg = void 0;
  * @category Class
  */
 class Lcg {
-    a;
-    c;
-    m;
     constructor(a, c, m) {
         this.a = a;
         this.c = c;
@@ -23,4 +20,4 @@ class Lcg {
     }
 }
 exports.Lcg = Lcg;
-exports.lcg = new Lcg(1664525, 1013904223, 2 ** 32);
+exports.lcg = new Lcg(1664525, 1013904223, Math.pow(2, 32));
