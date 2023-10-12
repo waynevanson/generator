@@ -16,7 +16,7 @@ module.exports = {
     requireCommits: true,
   },
   npm: {
-    publish: true,
+    publish: false,
     skipChecks: true,
   },
   github: {
