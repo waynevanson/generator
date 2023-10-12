@@ -51,7 +51,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - if: github.ref == 'refs/heads/main'
-        run: pnpm exec release-it --ci
+        run: pnpm exec release-it --config .release-it.js --ci
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
