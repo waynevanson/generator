@@ -8,19 +8,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - name: git config
-        run: |
-          git config user.name "${GITHUB_ACTOR}"
-          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-
-      - name: Setup SSH keys
-        uses: shimataro/ssh-key-action@v2
-        with:
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          known_hosts: github.com
 
       - uses: pnpm/action-setup@v2
         with:
@@ -35,14 +22,79 @@ jobs:
 
       - run: pnpm build
 
+      - uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: dist/
+          retention-days: 1
+  test:
+    needs: build
+    strategy:
+      matrix:
+        node: [18, 20]
+      fail-fast: true
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node }}
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
       - run: pnpm test
+
+  release:
+    if: github.ref == 'refs/heads/main'
+    needs:
+      - build
+      - test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Set git user and email
+        run: |
+          git config user.name "${GITHUB_ACTOR}"
+          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+
+      - name: Setup SSH keys
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_PLUBLIC_KEY }}
+          known_hosts: github.com
 
       - name: Set NPM registry
         run: npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - if: github.ref == 'refs/heads/main'
+      - uses: actions/download-artifact@v3
+        with:
+          name: dist
+
+      - name: Release
         run: pnpm exec release-it --config .release-it.js --ci
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
