@@ -1,5 +1,21 @@
 
 
+## [8.0.0](https://github.com/waynevanson/generator/compare/7.0.5...8.0.0) (2023-10-13)
+
+
+### ⚠ BREAKING CHANGES
+
+* add `number` constructor
+
+### Features
+
+* add `number` constructor ([e0a8339](https://github.com/waynevanson/generator/commit/e0a8339267781606be55ae478397c30545938b06))
+
+
+### Bug Fixes
+
+* make `sized` non-uniform for low integers ([e5efb13](https://github.com/waynevanson/generator/commit/e5efb1353c72c7eedc4749fd77fbe12aabbbf9a8))
+
 ## [7.0.5](https://github.com/waynevanson/generator/compare/7.0.4...7.0.5) (2023-10-13)
 
 
