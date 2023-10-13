@@ -389,7 +389,7 @@ export class Gen<A> {
    * assert.deepStrictEqual(result, expected)
    * ```
    */
-  intersect<B extends Record<string, unknown>>(
+  and<B extends Record<string, unknown>>(
     this: A extends Record<string, unknown> ? Gen<A> : never,
     and: Gen<B>
   ): Gen<A & B> {
@@ -427,7 +427,7 @@ export class Gen<A> {
    * assert.deepStrictEqual(result, expected)
    * ```
    */
-  union<B>(or: Gen<B>): Gen<A | B> {
+  or<B>(or: Gen<B>): Gen<A | B> {
     return new Gen(({ seed, lcg }) => {
       const boolean = seed < lcg.m / 2
       seed = lcg.increment(seed)
