@@ -1,5 +1,12 @@
 
 
+## [7.0.5](https://github.com/waynevanson/generator/compare/7.0.4...7.0.5) (2023-10-13)
+
+
+### Bug Fixes
+
+* union should return values, not eh generator ([fb5b715](https://github.com/waynevanson/generator/commit/fb5b7151802c74520ab032841612c3c7d72c4e1d))
+
 ## [7.0.4](https://github.com/waynevanson/generator/compare/7.0.3...7.0.4) (2023-10-13)
 
 ## [7.0.3](https://github.com/waynevanson/generator/compare/7.0.2...7.0.3) (2023-10-13)
