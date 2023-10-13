@@ -1,4 +1,4 @@
-import { clamp, createPositiveScaler } from "./util"
+import { clamp, createPositiveScaler } from "../src/gen/util"
 import * as fc from "fast-check"
 
 const integer = (constraints?: fc.IntegerConstraints) =>
