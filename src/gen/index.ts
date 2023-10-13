@@ -1258,5 +1258,5 @@ export function number({
 export function union<T extends ReadonlyArray<unknown>>(gens: {
   [P in keyof T]: Gen<T[P]>
 }): Gen<T[number]> {
-  return sized(gens.length).map((index) => gens[index])
+  return sized(gens.length).chain((index) => gens[index])
 }
