@@ -636,7 +636,9 @@ export function of<A>(value: A): Gen<A> {
  * ```
  */
 export function sized(max: number): Gen<number> {
-  return seeded.map((number) => number % max)
+  if (max < 2) return of(0)
+  else if (max == 2) return boolean.map((boolean) => (boolean ? 1 : 0))
+  else return seeded.map((seed) => seed % max)
 }
 
 /**
