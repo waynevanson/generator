@@ -1,5 +1,7 @@
 
 
+## [7.0.4](https://github.com/waynevanson/generator/compare/7.0.3...7.0.4) (2023-10-13)
+
 ## [7.0.3](https://github.com/waynevanson/generator/compare/7.0.2...7.0.3) (2023-10-13)
 
 
