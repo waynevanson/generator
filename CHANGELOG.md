@@ -1,5 +1,12 @@
 
 
+## [7.0.3](https://github.com/waynevanson/generator/compare/7.0.2...7.0.3) (2023-10-13)
+
+
+### Bug Fixes
+
+* remove dist items from ci ([f50c50a](https://github.com/waynevanson/generator/commit/f50c50a37307da1dd57beda1b2f86fc4038ad2e0))
+
 ## [7.0.2](https://github.com/waynevanson/generator/compare/7.0.1...7.0.2) (2023-10-13)
 
 
