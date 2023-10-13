@@ -1,5 +1,12 @@
 
 
+## [7.0.2](https://github.com/waynevanson/generator/compare/7.0.1...7.0.2) (2023-10-13)
+
+
+### Bug Fixes
+
+* remove dist from git ([03ad263](https://github.com/waynevanson/generator/commit/03ad263799718dce1eec3131c2ca3c4276d1b9eb))
+
 ## [7.0.1](https://github.com/waynevanson/generator/compare/7.0.0...7.0.1) (2023-10-13)
 
 
