@@ -26,8 +26,9 @@ export function createPositiveScaler(
  * @param source
  * The min and max inclusive range of the source number.
  * @param target
- * The min and max inclusive range of the source number.
+ * The min and max inclusive range of the target number.
  * @returns
+ * Function that takes a value from the source range to the target range
  */
 export function createScaler(
   source: Range,
