@@ -1,5 +1,12 @@
 
 
+## [7.0.1](https://github.com/waynevanson/generator/compare/7.0.0...7.0.1) (2023-10-13)
+
+
+### Bug Fixes
+
+* dont run husky on client machine ([7f8bef8](https://github.com/waynevanson/generator/commit/7f8bef8f8f379edf733d1e6d0bfdf8fabaca3d47))
+
 ## [7.0.0](https://github.com/waynevanson/generator/compare/6.0.4...7.0.0) (2023-10-13)
 
 
