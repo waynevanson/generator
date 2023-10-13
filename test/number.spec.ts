@@ -33,10 +33,10 @@ describe(gen.positive, () => {
   })
 })
 
-describe(gen.number, () => {
+describe(gen.integer, () => {
   it("should generate numbers that are not decimals", () => {
     expect(gen.decimal).toBeInstanceOf(gen.Gen)
-    const results = gen.number().range({
+    const results = gen.integer().range({
       state: { seed: 0, lcg: gen.lcg },
       size: 100,
     })
