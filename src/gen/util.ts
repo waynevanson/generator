@@ -49,3 +49,10 @@ export function createScaler(
 
   return (value) => createPositive(value) - createNegative(value)
 }
+
+export function biasByMix(
+  value: number,
+  { bias, mix }: Record<"bias" | "mix", number>
+): number {
+  return value * (1 - mix) + bias * mix
+}
