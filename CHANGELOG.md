@@ -1,5 +1,16 @@
 
 
+## [9.0.0](https://github.com/waynevanson/generator/compare/8.0.1...9.0.0) (2023-10-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* lcg values as constants
+
+### Features
+
+* lcg values as constants ([591f2a9](https://github.com/waynevanson/generator/commit/591f2a9e23978092d990392f1aab7bb77d186824))
+
 ## [8.0.1](https://github.com/waynevanson/generator/compare/8.0.0...8.0.1) (2023-10-13)
 
 ## [8.0.0](https://github.com/waynevanson/generator/compare/7.0.5...8.0.0) (2023-10-13)
