@@ -8,7 +8,7 @@ describe(gen.intersect, () => {
 
     const generator = gen.intersect([first, second, third])
     const results = generator.range({
-      state: { seed: 0, lcg: gen.lcg },
+      state: { seed: 0 },
       size: 10,
     })
 

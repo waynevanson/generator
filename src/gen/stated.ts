@@ -1,3 +1,4 @@
+import { increment } from "../lcg"
 import { Gen } from "./class"
 
 /**
@@ -16,4 +17,6 @@ import { Gen } from "./class"
  * assert.deepStrictEqual(result, state)
  * ```
  */
-export const stated = new Gen((state) => [state, state]).increment()
+export const stated = new Gen((state) => [state, state]).modify(({ seed }) => ({
+  seed: increment(seed),
+}))

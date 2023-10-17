@@ -1,3 +1,4 @@
+import { M_MODULUS } from ".."
 import { stated } from "./stated"
 
 /**
@@ -14,4 +15,4 @@ import { stated } from "./stated"
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-export const decimal = stated.map(({ seed, lcg }) => seed / (lcg.m - 1))
+export const decimal = stated.map(({ seed }) => seed / (M_MODULUS - 1))

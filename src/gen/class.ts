@@ -1,4 +1,4 @@
-import { Lcg } from "../lcg"
+import { M_MODULUS, increment } from "../lcg"
 
 /**
  * @summary The internal state used by a {@link Gen | generator}.
@@ -8,11 +8,6 @@ export interface State {
    * @summary The seed used for generating data.
    */
   seed: number
-
-  /**
-   * @summary A linear congruent generator used to increment the seed.
-   */
-  lcg: Lcg
 }
 
 /**
@@ -46,14 +41,6 @@ export class Gen<A> {
       const [value1, state2] = this.stateful(state1)
       return [value1, f(state2)]
     })
-  }
-
-  /**
-   * @summary Increments the seed within the state using the {@link Lcg | linear congruent generator}
-   * @category Combinator
-   */
-  increment(): Gen<A> {
-    return this.modify(({ lcg, seed }) => ({ lcg, seed: lcg.increment(seed) }))
   }
 
   /**
@@ -442,12 +429,12 @@ export class Gen<A> {
    * ```
    */
   or<B>(or: Gen<B>): Gen<A | B> {
-    return new Gen(({ seed, lcg }) => {
-      const boolean = seed < lcg.m / 2
-      seed = lcg.increment(seed)
+    return new Gen(({ seed }) => {
+      const boolean = seed < M_MODULUS / 2
+      seed = increment(seed)
       return boolean
-        ? this.stateful({ seed, lcg })
-        : (or.stateful({ seed, lcg }) as never)
+        ? this.stateful({ seed })
+        : (or.stateful({ seed }) as never)
     })
   }
 }

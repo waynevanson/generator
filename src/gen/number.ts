@@ -1,3 +1,4 @@
+import { M_MODULUS } from ".."
 import { Gen } from "./class"
 import { stated } from "./stated"
 import { createScaler } from "./util"
@@ -36,8 +37,8 @@ export function number({
   max = 2 ** 32,
 }: NumberOptions = {}): Gen<number> {
   const target = { min, max }
-  return stated.map(({ seed, lcg }) => {
-    const source = { min: 0, max: lcg.m - 1 }
+  const source = { min: 0, max: M_MODULUS - 1 }
+  return stated.map(({ seed }) => {
     const scaler = createScaler(source, target)
     return scaler(seed)
   })

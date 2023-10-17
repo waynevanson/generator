@@ -1,3 +1,4 @@
+import { M_MODULUS } from ".."
 import { stated } from "./stated"
 
 /**
@@ -19,4 +20,4 @@ import { stated } from "./stated"
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-export const boolean = stated.map(({ seed, lcg: { m } }) => seed < m / 2)
+export const boolean = stated.map(({ seed }) => seed < M_MODULUS / 2)

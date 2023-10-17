@@ -1,3 +1,4 @@
+import { M_MODULUS } from ".."
 import { Gen } from "./class"
 import { decimal } from "./decimal"
 import { stated } from "./stated"
@@ -103,13 +104,14 @@ export function positive(options?: PositiveOptions): Gen<number> {
   const { max, min, bias, influence } = verifyPositiveArguments(options)
 
   const target = { min, max }
+  const source = { min: 0, max: M_MODULUS - 1 }
+
   return stated
     .doApply(
       "mix",
       decimal.map((decimal) => decimal * (influence ?? 1))
     )
-    .map(({ seed, lcg, mix }) => {
-      const source = { min: 0, max: lcg.m - 1 }
+    .map(({ seed, mix }) => {
       const scaler = createPositiveScaler(source, target)
       const unbiased = scaler(seed)
       return influence != null
