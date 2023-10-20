@@ -28,7 +28,6 @@ jobs:
           path: dist/
           retention-days: 1
   test:
-    needs: build
     strategy:
       matrix:
         node: [18, 20]
