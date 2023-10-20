@@ -1,5 +1,12 @@
 
 
+## [11.0.3](https://github.com/waynevanson/generator/compare/11.0.2...11.0.3) (2023-10-20)
+
+
+### Bug Fixes
+
+* boolean uses constants internally ([7e4dc11](https://github.com/waynevanson/generator/commit/7e4dc11660d5f938e46ab3600d9c23b9e63f8030))
+
 ## [11.0.2](https://github.com/waynevanson/generator/compare/11.0.1...11.0.2) (2023-10-20)
 
 ## [11.0.1](https://github.com/waynevanson/generator/compare/11.0.0...11.0.1) (2023-10-20)
