@@ -77,7 +77,9 @@ export function sized(
 
   return seeded.map((seed) => {
     const decimal = seed / (M_MODULUS - 1)
-    const index = validators.findIndex((checker) => checker(decimal))!
+    const index = validators.findIndex((checker) => checker(decimal))
+
+    /* istanbul ignore next */
     if (index < 0)
       throw new Error(
         `Index should be greater than or equal to zero, but received ${index}. ` +
