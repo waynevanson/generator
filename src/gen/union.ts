@@ -28,8 +28,11 @@ import { sized } from "./sized"
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-export function union<T extends ReadonlyArray<unknown>>(gens: {
-  [P in keyof T]: Gen<T[P]>
-}): Gen<T[number]> {
-  return sized(gens.length).chain((index) => gens[index])
+export function union<T extends ReadonlyArray<unknown>>(
+  gens: {
+    [P in keyof T]: Gen<T[P]>
+  },
+  distribution?: { [P in keyof T]: number }
+): Gen<T[number]> {
+  return sized(gens.length, distribution).chain((index) => gens[index])
 }
