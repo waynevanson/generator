@@ -77,7 +77,7 @@ The above prints the following:
   {
     "name": "gregory house",
     "age": 89,
-    "friendly": true,
+    "friendly": false,
     "foods": ["sultanas", "apricot"],
     "eyes": "brown"
   },
