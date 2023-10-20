@@ -1,5 +1,23 @@
 
 
+## [11.0.0](https://github.com/waynevanson/generator/compare/10.0.0...11.0.0) (2023-10-20)
+
+
+### ⚠ BREAKING CHANGES
+
+* distribution of default impl
+* add distribution as parameter to `union`
+
+### Features
+
+* add distribution as parameter to `union` ([a9d863f](https://github.com/waynevanson/generator/commit/a9d863f4a486711584e5129eae4b2154cdb5f3ea))
+
+
+### Bug Fixes
+
+* add better error for bad distribution ([d15621c](https://github.com/waynevanson/generator/commit/d15621c1e19439af3c1e1d0939d5030cb3d750d3))
+* distribution of default impl ([f37293c](https://github.com/waynevanson/generator/commit/f37293cd819b2935c74538975516830ebf7e3f8b))
+
 ## [10.0.0](https://github.com/waynevanson/generator/compare/9.0.0...10.0.0) (2023-10-20)
 
 
