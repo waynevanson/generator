@@ -29,9 +29,9 @@ describe(sized, () => {
   })
 
   it("should generate the most occurences of a number with the highest distribution", () => {
-    const size = 3
-    const generator = sized(size, [0.1, 0.2, 0.7])
-    const result = generator.range({ seed: 0, size: 100 })
+    const size = 4
+    const generator = sized(size, [0.1, 0.2, 0.4, 0.3])
+    const result = generator.range({ seed: 0, size: 1000 })
 
     const counts = result.reduce(
       (accu, curr) => {
@@ -41,6 +41,7 @@ describe(sized, () => {
       Array.from(new Array(size)).map(() => 0)
     )
 
+    expect(counts[2]).toBeGreaterThan(counts[3])
     expect(counts[2]).toBeGreaterThan(counts[1])
     expect(counts[2]).toBeGreaterThan(counts[0])
   })
