@@ -1,5 +1,18 @@
 
 
+## [10.0.0](https://github.com/waynevanson/generator/compare/9.0.0...10.0.0) (2023-10-20)
+
+
+### ⚠ BREAKING CHANGES
+
+* simplify state to be the seed only
+* add distribution option for `sized`
+
+### Features
+
+* add distribution option for `sized` ([e04a218](https://github.com/waynevanson/generator/commit/e04a21867995a0201ae70f65a82ac1533e9bdf79))
+* simplify state to be the seed only ([126ad78](https://github.com/waynevanson/generator/commit/126ad78ea511ae0ceaaec27c077bc702bea26bb0))
+
 ## [9.0.0](https://github.com/waynevanson/generator/compare/8.0.1...9.0.0) (2023-10-17)
 
 
