@@ -1,3 +1,4 @@
+import { constants } from "./constants"
 import { M_MODULUS } from "../lcg"
 import { seeded } from "./seeded"
 
@@ -20,4 +21,4 @@ import { seeded } from "./seeded"
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-export const boolean = seeded.map((seed) => seed < M_MODULUS / 2)
+export const boolean = constants([true, false])
