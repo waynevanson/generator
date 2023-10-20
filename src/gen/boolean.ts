@@ -1,5 +1,5 @@
-import { M_MODULUS } from ".."
-import { stated } from "./stated"
+import { M_MODULUS } from "../lcg"
+import { seeded } from "./seeded"
 
 /**
  * @summary
@@ -20,4 +20,4 @@ import { stated } from "./stated"
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-export const boolean = stated.map(({ seed }) => seed < M_MODULUS / 2)
+export const boolean = seeded.map((seed) => seed < M_MODULUS / 2)

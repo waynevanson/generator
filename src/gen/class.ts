@@ -1,34 +1,34 @@
 import { M_MODULUS, increment } from "../lcg"
 
 /**
- * @summary The internal state used by a {@link Gen | generator}.
+ * @summary
+ * The internal state used by a {@link Gen | generator}.
+ * It holds the seed for generating numbers.
  */
-export interface State {
-  /**
-   * @summary The seed used for generating data.
-   */
-  seed: number
-}
+export type Seed = number
 
 /**
  * @summary
  * Generator that holds the computation for generating values and the
- * {@link State | internal state} for incrementing the seed.
+ * {@link Seed | internal state} for incrementing the seed.
  * 
  * @category Class
 
  * @remarks
  * A generator is lazy: it will only run when `Gen.run` is called with the state.
  * To compose the generator's data without consuming it, consider using the combinators.
+ * 
+ * shoudl increment
+ * 
  */
 export class Gen<A> {
-  constructor(public stateful: (state: State) => [A, State]) {}
+  constructor(public stateful: (state: Seed) => [A, Seed]) {}
 
   /**
    * @summary Runs the generator and returns the resulting value.
    * @category Destructor
    */
-  run(state: State): A {
+  run(state: Seed): A {
     return this.stateful(state)[0]
   }
 
@@ -36,7 +36,7 @@ export class Gen<A> {
    * @summary Modifies the state of the generate without modifying the value.
    * @category Combinator
    */
-  modify(f: (state: State) => State): Gen<A> {
+  modify(f: (state: Seed) => Seed): Gen<A> {
     return new Gen((state1) => {
       const [value1, state2] = this.stateful(state1)
       return [value1, f(state2)]
@@ -353,11 +353,11 @@ export class Gen<A> {
    * assert.deepStrictEqual(result, expected)
    * ```
    */
-  range({ state, size = 10 }: { state: State; size?: number }): Array<A> {
+  range({ seed, size }: { seed: Seed; size: number }): Array<A> {
     const result = []
     let value
     for (const _ of new Array(size)) {
-      ;[value, state] = this.stateful(state)
+      ;[value, seed] = this.stateful(seed)
       result.push(value)
     }
     return result
@@ -429,12 +429,10 @@ export class Gen<A> {
    * ```
    */
   or<B>(or: Gen<B>): Gen<A | B> {
-    return new Gen(({ seed }) => {
+    return new Gen((seed) => {
       const boolean = seed < M_MODULUS / 2
       seed = increment(seed)
-      return boolean
-        ? this.stateful({ seed })
-        : (or.stateful({ seed }) as never)
+      return boolean ? this.stateful(seed) : (or.stateful(seed) as never)
     })
   }
 }

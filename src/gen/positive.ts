@@ -1,8 +1,8 @@
-import { M_MODULUS } from ".."
+import { seeded } from "./seeded"
 import { Gen } from "./class"
 import { decimal } from "./decimal"
-import { stated } from "./stated"
 import { biasByMix, createPositiveScaler } from "./util"
+import { M_MODULUS } from "../lcg"
 
 export interface PositiveOptions
   extends PositiveOptionsDefaults,
@@ -106,7 +106,8 @@ export function positive(options?: PositiveOptions): Gen<number> {
   const target = { min, max }
   const source = { min: 0, max: M_MODULUS - 1 }
 
-  return stated
+  return seeded
+    .do("seed")
     .doApply(
       "mix",
       decimal.map((decimal) => decimal * (influence ?? 1))

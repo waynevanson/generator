@@ -16,7 +16,7 @@ describe(sized, () => {
   it("should generate a range of values between 0 and the max size", () => {
     const size = 5
     const generator = sized(size, [0.1, 0.15, 0.2, 0.25, 0.3])
-    const result = generator.range({ state: { seed: 0 }, size: 10 })
+    const result = generator.range({ seed: 0, size: 10 })
     expect(result).toSatisfyAll((value) => 0 <= value && value <= size)
   })
 })

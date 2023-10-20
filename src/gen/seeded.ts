@@ -17,6 +17,4 @@ import { Gen } from "./class"
  * assert.deepStrictEqual(result, seed)
  * ```
  */
-export const seeded = new Gen((state) => [state.seed, state]).modify(
-  ({ seed }) => ({ seed: increment(seed) })
-)
+export const seeded = new Gen((seed) => [seed, seed]).modify(increment)

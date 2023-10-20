@@ -1,5 +1,5 @@
-import { M_MODULUS } from ".."
-import { stated } from "./stated"
+import { M_MODULUS } from "../lcg"
+import { seeded } from "./seeded"
 
 /**
  * @summary Generates a number betwwen 0 and 1.
@@ -15,4 +15,4 @@ import { stated } from "./stated"
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-export const decimal = stated.map(({ seed }) => seed / (M_MODULUS - 1))
+export const decimal = seeded.map((seed) => seed / (M_MODULUS - 1))

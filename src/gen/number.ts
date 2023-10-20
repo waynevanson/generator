@@ -1,6 +1,6 @@
-import { M_MODULUS } from ".."
+import { M_MODULUS } from "../lcg"
 import { Gen } from "./class"
-import { stated } from "./stated"
+import { seeded } from "./seeded"
 import { createScaler } from "./util"
 
 export interface NumberOptions {
@@ -38,7 +38,7 @@ export function number({
 }: NumberOptions = {}): Gen<number> {
   const target = { min, max }
   const source = { min: 0, max: M_MODULUS - 1 }
-  return stated.map(({ seed }) => {
+  return seeded.map((seed) => {
     const scaler = createScaler(source, target)
     return scaler(seed)
   })
