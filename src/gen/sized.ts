@@ -5,7 +5,8 @@ import { M_MODULUS } from "../lcg"
 export type Distribution = ReadonlyArray<number>
 
 export function createDistribution(max: number): Distribution {
-  return Array.from(new Array(max)).map((_, index) => index / M_MODULUS - 1)
+  const average = 1 / max
+  return Array.from(new Array(max)).map(() => average)
 }
 
 export function accumulate<A>(
