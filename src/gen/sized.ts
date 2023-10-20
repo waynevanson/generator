@@ -64,11 +64,13 @@ export function sized(
         `must be equal to the length of the max value (${max}).`
     )
 
-  const sum = distribution.reduce((prev, curr) => prev + curr) != 1
+  const sum = distribution.reduce((prev, curr) => prev + curr)
 
-  if (sum)
+  if (sum !== 1)
     throw new Error(
-      `The sum of a distribution should be equal to 1, but received ${sum}.`
+      `The sum of a distribution should be equal to 1, but received ${sum}. ` +
+        `The distribution is:\n` +
+        JSON.stringify(distribution, null, 2)
     )
 
   const validators = createValidators(distribution)
