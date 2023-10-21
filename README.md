@@ -107,3 +107,10 @@ The above prints the following:
 
 Please visit the code for more information.
 The code has docs and the code examples are the tests.
+
+## Upcoming
+
+- Distribution options for all applicable generators (about half are done)
+- Use new distrubtion pattern for integer values
+- 100% test coverage and carefully considered tests
+- Generated documents from code
