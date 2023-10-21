@@ -1,5 +1,16 @@
 
 
+## [12.0.0](https://github.com/waynevanson/generator/compare/11.0.3...12.0.0) (2023-10-21)
+
+
+### ⚠ BREAKING CHANGES
+
+* add distribution option to `partial`
+
+### Features
+
+* add distribution option to `partial` ([a54d4fa](https://github.com/waynevanson/generator/commit/a54d4fa7cd98b589755474b32fe8b584a4514659))
+
 ## [11.0.3](https://github.com/waynevanson/generator/compare/11.0.2...11.0.3) (2023-10-20)
 
 
