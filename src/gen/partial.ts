@@ -1,5 +1,19 @@
-import { boolean } from "./boolean"
+import { of, union } from "."
 import { Gen } from "./class"
+import { seeded } from "./seeded"
+
+export function createDistribution<P extends string>(
+  properties: Array<P>
+): Record<P, number> {
+  const result = {} as Record<P, number>
+  for (const property of properties) {
+    result[property] = 0.5
+  }
+
+  return result
+}
+
+const OMIT = Symbol("OMIT")
 
 /**
  * @summary
@@ -28,21 +42,26 @@ import { Gen } from "./class"
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-export function partial<T extends Record<string, unknown>>(gens: {
-  [P in keyof T]: Gen<T[P]>
-}): Gen<Partial<T>> {
-  return new Gen((state) => {
-    const gensByProperty = Object.keys(gens) as Array<keyof T>
+export function partial<T extends Record<string, unknown>>(
+  gens: {
+    [P in keyof T]: Gen<T[P]>
+  },
+  distributions: Partial<Record<keyof T & string, number>> = {}
+): Gen<Partial<T>> {
+  const prop = (gen: Gen<unknown>, weight: number) =>
+    union([of(OMIT), gen] as const, [1 - weight, weight])
+
+  return new Gen((seed) => {
+    let value: unknown
+
     const result = {} as Partial<T>
-    let value
-    let skip
-    for (const property of gensByProperty) {
-      ;[skip, state] = boolean.stateful(state)
-      if (skip) continue
-      const gen = gens[property]
-      ;[value, state] = gen.stateful(state)
-      result[property] = value
+    for (const property of Object.keys(gens) as Array<keyof T>) {
+      const gen = gens[property]!
+      const distribution = distributions[property as never] ?? 0.5
+      ;[value, seed] = prop(gen, distribution).stateful(seed)
+      if (value === OMIT) continue
+      else result[property] = value as never
     }
-    return [result, state]
+    return [result, seed]
   })
 }
