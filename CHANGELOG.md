@@ -1,5 +1,12 @@
 
 
+## [12.1.0](https://github.com/waynevanson/generator/compare/12.0.0...12.1.0) (2023-10-22)
+
+
+### Features
+
+* use `sized` for `integer` and `number` ([04f657a](https://github.com/waynevanson/generator/commit/04f657a975f9d30c1af65383ea2cebcf6afd408c))
+
 ## [12.0.0](https://github.com/waynevanson/generator/compare/11.0.3...12.0.0) (2023-10-21)
 
 
