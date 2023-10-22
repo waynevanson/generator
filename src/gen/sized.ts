@@ -4,9 +4,18 @@ import { M_MODULUS } from "../lcg"
 
 export type Distribution = ReadonlyArray<number>
 
+// todo - instead of finding at index, lets allow multiple numbers
+// to get the
 export function createDistribution(max: number): Distribution {
   const average = 1 / max
-  return Array.from(new Array(max)).map(() => average)
+  const distribution = Array.from(new Array(max)).map(() => average)
+  const summish = distribution
+    .slice(0, -1)
+    .reduce((first, second) => first + second, 0)
+  const last = 1 - summish
+  distribution[distribution.length - 1] = last
+
+  return distribution
 }
 
 export function accumulate<A>(
@@ -32,6 +41,23 @@ export function createValidators(
   })
 }
 
+class Cache<K, V> {
+  constructor(private store = new Map<K, V>()) {}
+
+  get(key: K, value: () => V): V {
+    if (!this.store.has(key)) {
+      this.store.set(key, value())
+    }
+    return this.store.get(key)!
+  }
+}
+
+// creating distributions can be expensive.
+// if the library generates a default distribution,
+// caching it for large numbers may increase performance in large codebases
+// and in chained generators.
+const cache = new Cache<number, ReadonlyArray<number>>()
+
 /**
  * @summary
  * Creates a generator that contains `max` amount of values
@@ -53,7 +79,9 @@ export function createValidators(
  */
 export function sized(
   max: number,
-  distribution: ReadonlyArray<number> = createDistribution(max)
+  distribution: ReadonlyArray<number> = cache.get(max, () =>
+    createDistribution(max)
+  )
 ): Gen<number> {
   if (max < 1)
     throw new Error("Sized generator must have a max number greater than 1.")
