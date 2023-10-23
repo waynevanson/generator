@@ -51,7 +51,7 @@
       "prettier -w"
     ],
     "src/**/*.ts": [
-      "jest --"
+      "jest --passWithNoTests --"
     ]
   },
   "publishConfig": {
