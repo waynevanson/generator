@@ -19,7 +19,7 @@ import { Gen } from "./class"
  * assert.deepStrictEqual(result, expected)
  * ```
  */
-export function tuple<T extends readonly [unknown, ...Array<unknown>]>(gens: {
+export function tuple<T extends ReadonlyArray<unknown>>(gens: {
   [P in keyof T]: Gen<T[P]>
 }): Gen<T> {
   return new Gen((state1) => {
