@@ -29,7 +29,7 @@ export function record<K extends string, A>(
   value: Gen<A>,
   range: NumberOptions
 ): Gen<Record<K, A>> {
-  return array(tuple([property, value]), range).map((entries) =>
+  return array(tuple([property, value] as const), range).map((entries) =>
     entries.reduce((result, [property, value]) => {
       result[property] = value
       return result
