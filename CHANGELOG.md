@@ -1,5 +1,12 @@
 
 
+## [12.2.0](https://github.com/waynevanson/generator/compare/12.1.0...12.2.0) (2023-10-23)
+
+
+### Features
+
+* add `spliced` constructor ([59e8c2b](https://github.com/waynevanson/generator/commit/59e8c2b2fad954b9abaabdf2656baf2fd7fa681e))
+
 ## [12.1.0](https://github.com/waynevanson/generator/compare/12.0.0...12.1.0) (2023-10-22)
 
 
