@@ -17,6 +17,16 @@ describe(gen.spliced, () => {
     )
   })
 
+  it("should use 0.5 as the default value when the parameter is omitted", () => {
+    const values = ["a", "b", "c", "d", "e", "f"]
+    const one = gen.spliced(values, 0.5)
+    const first = one.range({ seed: 0, size: 100 })
+    const two = gen.spliced(values)
+    const second = two.range({ seed: 0, size: 100 })
+
+    expect(first).toStrictEqual(second)
+  })
+
   it("should remove a mostly fixed amountof values", () => {
     const generator = gen.spliced(["a", "b", "c", "d", "e", "f"], 0.5)
     const range = generator.range({ seed: 0, size: 100 })
