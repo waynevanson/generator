@@ -1,5 +1,12 @@
 
 
+## [13.1.0](https://github.com/waynevanson/generator/compare/13.0.1...13.1.0) (2023-10-23)
+
+
+### Features
+
+* `record` no longer requires options ([f3e4f0a](https://github.com/waynevanson/generator/commit/f3e4f0a8b38476d301d57b426d6a4f72bdcba2ee))
+
 ## [13.0.1](https://github.com/waynevanson/generator/compare/13.0.0...13.0.1) (2023-10-23)
 
 ## [13.0.0](https://github.com/waynevanson/generator/compare/12.2.0...13.0.0) (2023-10-23)
