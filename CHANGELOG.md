@@ -1,5 +1,20 @@
 
 
+## [13.0.0](https://github.com/waynevanson/generator/compare/12.2.0...13.0.0) (2023-10-23)
+
+
+### ⚠ BREAKING CHANGES
+
+* `sequenced` and `tuple` contained duplicated code.
+Please replace uses of `seqence` with `tuple`
+* `sequenced` and `tuple` contained duplicated code.
+Please replace uses of `seqence` with `tuple`
+
+### Features
+
+* remove `sequenced` ([8f65c2d](https://github.com/waynevanson/generator/commit/8f65c2d4e75bf88448cbc2c09b3eb3bdaa82b9b2))
+* remove `sequenced` ([f3501bc](https://github.com/waynevanson/generator/commit/f3501bc0f7a21b5ce729a4397ba57baee650cb1a))
+
 ## [12.2.0](https://github.com/waynevanson/generator/compare/12.1.0...12.2.0) (2023-10-23)
 
 
