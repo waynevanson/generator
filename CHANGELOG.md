@@ -1,5 +1,12 @@
 
 
+## [13.2.0](https://github.com/waynevanson/generator/compare/13.1.0...13.2.0) (2023-10-24)
+
+
+### Features
+
+* add `expand` combinator ([5b696b7](https://github.com/waynevanson/generator/commit/5b696b7f66e96a5804defec8211fc047bf2d77ae))
+
 ## [13.1.0](https://github.com/waynevanson/generator/compare/13.0.1...13.1.0) (2023-10-23)
 
 
