@@ -1,3 +1,4 @@
+import { seeded } from "./seeded"
 import { Gen } from "./class"
 import { integer } from "./integer"
 
@@ -5,14 +6,14 @@ import { integer } from "./integer"
  * @summary
  * Creates a generator from an array and returns an array with some elements removed.
  *
- * @param skips
- * A decimal percentage value that indicates how many elements to remove on average compared to
+ * @param distribution
+ * A decimal percentage value that indicates how many elements to keep on average compared to
  */
 export function spliced<A>(
   values: ReadonlyArray<A>,
-  skips: number = 0.5
+  distribution: number = 0.5,
 ): Gen<ReadonlyArray<A>> {
-  const decimal = values.length - skips * values.length
+  const decimal = values.length - distribution * values.length
 
   const min = Math.floor(decimal)
   const max = Math.ceil(decimal)
