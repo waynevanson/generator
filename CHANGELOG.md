@@ -1,5 +1,7 @@
 
 
+## [13.2.1](https://github.com/waynevanson/generator/compare/13.2.0...13.2.1) (2023-10-24)
+
 ## [13.2.0](https://github.com/waynevanson/generator/compare/13.1.0...13.2.0) (2023-10-24)
 
 
