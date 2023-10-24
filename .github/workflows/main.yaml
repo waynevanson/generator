@@ -48,7 +48,7 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - run: pnpm test --coverage --coverageReporters text,cobertura
+      - run: pnpm test  -- --coverage
 
       - name: Upload coverage reports to Codecov
         if: ${{ matrix.node == '18' }}
