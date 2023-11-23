@@ -1,5 +1,16 @@
 
 
+## [14.0.0](https://github.com/waynevanson/generator/compare/13.2.1...14.0.0) (2023-11-23)
+
+
+### ⚠ BREAKING CHANGES
+
+* update many things
+
+### Features
+
+* update many things ([795bc47](https://github.com/waynevanson/generator/commit/795bc4796b75be1308d393d7e99f657b9ba44c2b))
+
 ## [13.2.1](https://github.com/waynevanson/generator/compare/13.2.0...13.2.1) (2023-10-24)
 
 ## [13.2.0](https://github.com/waynevanson/generator/compare/13.1.0...13.2.0) (2023-10-24)
