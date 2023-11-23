@@ -1,11 +1,11 @@
+import { integer } from "."
 import { Gen } from "./class"
-import { positive } from "./positive"
 import { vector } from "./vector"
 
 export interface ArrayOptions {
   min?: number
   max?: number
-  bias?: number
+  target?: number
   influence?: number
 }
 
@@ -27,9 +27,9 @@ export interface ArrayOptions {
  */
 export function array<A>(
   gen: Gen<A>,
-  { min = 0, max = 50, bias, influence }: ArrayOptions = {}
+  { min = 0, max = 50, target = 0, influence = 0 }: ArrayOptions = {},
 ): Gen<Array<A>> {
-  return positive({ min, max, bias, influence }).chain((size) =>
-    vector(gen, Math.round(size))
+  return integer({ min, max, target, influence }).chain((size) =>
+    vector(gen, size),
   )
 }

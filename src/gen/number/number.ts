@@ -1,6 +1,6 @@
-import { decimal, integer, tuple } from "."
-import { SEED_MAX } from "../lcg"
-import { Gen } from "./class"
+import { decimal, integer, tuple } from ".."
+import { SEED_MAX } from "../../lcg"
+import { Gen } from "../class"
 
 export interface NumberOptions {
   /**
@@ -35,6 +35,6 @@ export function number({
   max = SEED_MAX,
 }: NumberOptions = {}): Gen<number> {
   return tuple([integer({ min, max }), decimal]).map(
-    ([integer, decimal]) => integer + decimal
+    ([integer, decimal]) => integer + decimal,
   )
 }

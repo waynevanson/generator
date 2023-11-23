@@ -1,6 +1,6 @@
+import { IntegerOptions } from "./number"
 import { array } from "./array"
 import { Gen } from "./class"
-import { NumberOptions } from "./number"
 import { tuple } from "./tuple"
 
 /**
@@ -27,9 +27,9 @@ import { tuple } from "./tuple"
 export function record<K extends string, A>(
   property: Gen<K>,
   value: Gen<A>,
-  range: NumberOptions = {},
+  options: IntegerOptions = { min: 0, max: 100 },
 ): Gen<Record<K, A>> {
-  return array(tuple([property, value] as const), range).map((entries) =>
+  return array(tuple([property, value] as const), options).map((entries) =>
     entries.reduce(
       (result, [property, value]) => {
         result[property] = value

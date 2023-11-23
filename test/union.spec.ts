@@ -7,9 +7,20 @@ describe(gen.union, () => {
     const result = generator.range({ seed: 0, size: 100 })
 
     expect(result).toSatisfyAll((value) =>
-      ["string", "number", "boolean"].includes(typeof value)
+      ["string", "number", "boolean"].includes(typeof value),
     )
   })
 
-  it.todo("distribution")
+  it("should ", () => {
+    const generator = gen.union(
+      [gen.integer(), gen.string(), gen.boolean] as const,
+      [0.25, 0.25, 0.5],
+    )
+
+    const result = generator.range({ seed: 0, size: 100 })
+
+    expect(result).toSatisfyAll((value) =>
+      ["string", "number", "boolean"].includes(typeof value),
+    )
+  })
 })

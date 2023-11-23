@@ -1,5 +1,6 @@
+import { of } from "."
 import { Gen } from "./class"
-import { sized } from "./sized"
+import { index } from "./number/index_"
 
 /**
  * @summary
@@ -32,7 +33,22 @@ export function union<T extends ReadonlyArray<unknown>>(
   gens: {
     [P in keyof T]: Gen<T[P]>
   },
-  distribution?: { [P in keyof T]: number }
+  distribution = gens.map(() => 1 / gens.length) as { [P in keyof T]: number },
 ): Gen<T[number]> {
-  return sized(gens.length, distribution).chain((index) => gens[index])
+  if (gens.length <= 0) return of([])
+  const distributed = distribution?.reduce(
+    (accu, curr, index) => {
+      accu[index + 1] = curr
+      return accu
+    },
+    {} as Record<number, number>,
+  )
+
+  // console.log({ distribution, distributed })
+
+  return index(gens.length, distributed).chain((index) => {
+    const valued = gens[index]
+    // console.log({ valued, index })
+    return valued
+  })
 }

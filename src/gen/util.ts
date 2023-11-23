@@ -15,7 +15,7 @@ export function clamp(number: number, { min, max }: Range): number {
  */
 export function createPositiveScaler(
   source: Range,
-  target: Range
+  target: Range,
 ): (number: number) => number {
   const top = target.max - target.min
   const bot = source.max - source.min
@@ -32,7 +32,7 @@ export function createPositiveScaler(
  */
 export function createScaler(
   source: Range,
-  target: Range
+  target: Range,
 ): (number: number) => number {
   const { min, max } = target
   const upper = {
@@ -52,7 +52,16 @@ export function createScaler(
 
 export function biasByMix(
   value: number,
-  { bias, mix }: Record<"bias" | "mix", number>
+  { target, mix }: Record<"target" | "mix", number>,
 ): number {
-  return value * (1 - mix) + bias * mix
+  return value * (1 - mix) + target * mix
+}
+
+export function createLinearScaler(
+  options: Record<"source" | "target", Record<"min" | "max", number>>,
+) {
+  const { source, target } = options
+  const top = target.max - target.min
+  const bot = source.max - source.min
+  return (x: number) => ((x - source.min) / bot) * top + target.min
 }

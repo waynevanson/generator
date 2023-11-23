@@ -1,6 +1,5 @@
-import { seeded } from "./seeded"
 import { Gen } from "./class"
-import { integer } from "./integer"
+import { integer } from "./number/integer"
 
 /**
  * @summary

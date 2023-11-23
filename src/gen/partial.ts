@@ -3,7 +3,7 @@ import { Gen } from "./class"
 import { seeded } from "./seeded"
 
 export function createDistribution<P extends string>(
-  properties: Array<P>
+  properties: Array<P>,
 ): Record<P, number> {
   const result = {} as Record<P, number>
   for (const property of properties) {
@@ -46,7 +46,7 @@ export function partial<T extends Record<string, unknown>>(
   gens: {
     [P in keyof T]: Gen<T[P]>
   },
-  distributions: Partial<Record<keyof T & string, number>> = {}
+  distributions: Partial<Record<keyof T & string, number>> = {},
 ): Gen<Partial<T>> {
   const prop = (gen: Gen<unknown>, weight: number) =>
     union([of(OMIT), gen] as const, [1 - weight, weight])

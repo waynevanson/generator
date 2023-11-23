@@ -2,7 +2,8 @@ import { increment } from "../lcg"
 import { Gen } from "./class"
 
 /**
- * @summary Creates a generator that uses the incoming seed as the value.
+ * @summary
+ * Creates a generator that consumes the incoming seed returns it as the value, and incrementing the internal seed.
  * @category Instance
  *
  * @example

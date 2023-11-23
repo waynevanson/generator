@@ -1,5 +1,5 @@
 import { Gen } from "./class"
-import { sized } from "./sized"
+import { uniform } from "./number/uniform"
 
 /**
  * @summary
@@ -20,7 +20,7 @@ import { sized } from "./sized"
  * ```
  */
 export function constants<T extends readonly [unknown, ...Array<unknown>]>(
-  values: T
+  values: T,
 ): Gen<T[number]> {
-  return sized(values.length).map((index) => values[index])
+  return uniform(values.length).map((index) => values[index])
 }

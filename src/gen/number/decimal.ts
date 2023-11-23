@@ -1,5 +1,5 @@
-import { M_MODULUS } from "../lcg"
-import { seeded } from "./seeded"
+import { M_MODULUS } from "../../lcg"
+import { seeded } from "../seeded"
 
 /**
  * @summary Generates a number betwwen 0 and 1.

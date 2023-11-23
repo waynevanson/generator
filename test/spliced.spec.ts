@@ -13,7 +13,7 @@ describe(gen.spliced, () => {
         const previousIndex = values.indexOf(previous)
         const currentIndex = values.indexOf(current)
         return previousIndex < currentIndex
-      })
+      }),
     )
   })
 
@@ -27,7 +27,7 @@ describe(gen.spliced, () => {
     expect(first).toStrictEqual(second)
   })
 
-  it("should remove a mostly fixed amountof values", () => {
+  it.only("should remove a mostly fixed amountof values", () => {
     const generator = gen.spliced(["a", "b", "c", "d", "e", "f"], 0.5)
     const range = generator.range({ seed: 0, size: 100 })
     expect(range).toSatisfyAll((array) => array.length === 3)
@@ -37,7 +37,7 @@ describe(gen.spliced, () => {
     const generator = gen.spliced(["a", "b", "c", "d", "e", "f"], 0.4)
     const range = generator.range({ seed: 0, size: 100 })
     expect(range).toSatisfyAll(
-      (array) => array.length === 3 || array.length === 4
+      (array) => array.length === 3 || array.length === 4,
     )
   })
 })
